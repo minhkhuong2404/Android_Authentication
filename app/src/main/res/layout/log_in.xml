@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LogIn"
+    android:background="@color/grey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back_btn_log_in"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/baseline_arrow_back_ios_new_black_24dp"
+            android:layout_marginStart="15dp" />
+
+        <TextView
+            android:id="@+id/log_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Log In"
+            android:textSize="22sp"
+            android:textColor="@color/text"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp" />
+
+        <TextView
+            android:id="@+id/enter_login_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:text="Enter your login details to access your account"
+            android:layout_marginStart="15dp" />
+
+        <EditText
+            android:id="@+id/enter_email_field_log_in"
+            android:layout_width="340dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:layout_marginTop="120dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:background="@drawable/text_field"
+            android:inputType="textEmailAddress"
+            android:fontFamily="@font/pt_sans_regular"
+            android:textColor="@color/text" />
+
+        <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
+            android:id="@+id/enter_email_password_log_in"
+            android:layout_width="340dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:background="@drawable/text_field"
+            android:inputType="textPassword"
+            android:fontFamily="@font/pt_sans_regular"
+            android:textColor="@color/text" />
+
+        <Button
+            android:id="@+id/log_in_continue_btn"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:text="@string/continue_btn">
+        </Button>
+
+    </LinearLayout>
+</RelativeLayout>

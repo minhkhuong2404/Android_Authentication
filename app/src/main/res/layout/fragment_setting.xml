@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile.Profile"
+    android:background="@color/grey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back_btn_notification"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/baseline_arrow_back_ios_new_black_24dp"
+            android:layout_marginStart="15dp" />
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="@color/text"
+            android:textSize="22sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/pt_sans_bold"/>
+        <TextView
+            android:id="@+id/setting_my_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Account"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_baseline_account_box_24"
+            android:drawablePadding="15dp"/>
+        <TextView
+            android:id="@+id/setting_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_outline_notifications_none_24"
+            android:drawablePadding="15dp"/>
+        <TextView
+            android:id="@+id/setting_activity_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity History"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_baseline_timer_24"
+            android:drawablePadding="15dp"/>
+        <TextView
+            android:id="@+id/setting_billing_and_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Billing and Payment"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_baseline_credit_card_24"
+            android:drawablePadding="15dp"/>
+        <TextView
+            android:id="@+id/setting_security_and_privacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Security and Privacy"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_outline_lock_24"
+            android:drawablePadding="15dp"/>
+        <TextView
+            android:id="@+id/setting_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Help"
+            android:textColor="@color/text"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textSize="16sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/ic_baseline_help_outline_24"
+            android:drawablePadding="15dp"/>
+        <Button
+            android:id="@+id/sign_out_btn"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:text="Sign Out"
+            android:layout_gravity="center"
+            android:fontFamily="@font/pt_sans_regular"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
