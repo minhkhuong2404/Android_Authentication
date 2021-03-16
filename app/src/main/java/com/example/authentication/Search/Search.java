@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.authentication.Course;
+import com.example.authentication.DataHandler;
 import com.example.authentication.Explorer.CourseAdapterExplorer;
 import com.example.authentication.Explorer.Explorer;
 import com.example.authentication.Home.Home;
@@ -83,17 +84,7 @@ public class Search extends Fragment {
         rvCourses = view.findViewById(R.id.rv_search);
         
         mCourses = new ArrayList<Course>();
-
-        mCourses.add(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Business Master Class","$ 440", "$ 299", "4.8", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Adobe XD Masterclass","$ 140", "$ 99", "4.8", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Photoshop CC Masterclass","$ 540", "$ 399", "4.5", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Illustrator CC Masterclass","$ 640", "$ 499", "4.8", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Premiere Pro CC Masterclass","$ 849", "$ 599", "4.7", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Business Introduction", "$ 350", "$ 199", "4.6", getResources().getDrawable(R.drawable.orange_background)));
-        mCourses.add(new Course("Business Management", "$ 250", "$ 99", "3.8", getResources().getDrawable(R.drawable.orange_background)));
+        mCourses = new DataHandler(getContext(), null, null,1).loadDataHandler("All");
 
         mSearchAdapter = new SearchAdapter(getContext(), mCourses);
 
@@ -124,7 +115,6 @@ public class Search extends Fragment {
     }
 
     private void backToExplorer() {
-        Fragment fragment = new Explorer();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

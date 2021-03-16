@@ -1,7 +1,9 @@
 package com.example.authentication;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -54,6 +56,7 @@ public class LogIn extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                addCourse();
                 checkLogin();
             }
         });
@@ -70,6 +73,22 @@ public class LogIn extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    public void addCourse() {
+        DataHandler dbHandler = new DataHandler(this, null, null, 1);
+        dbHandler.addDataHandler(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Business Master Class","$ 440", "$ 299", "4.8", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Adobe XD Masterclass","$ 140", "$ 99", "4.8", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Photoshop CC Masterclass","$ 540", "$ 399", "4.5", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Illustrator CC Masterclass","$ 640", "$ 499", "4.8", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Premiere Pro CC Masterclass","$ 849", "$ 599", "4.7", R.drawable.orange_background, "Design"));
+        dbHandler.addDataHandler(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", R.drawable.orange_background, "Business"));
+        dbHandler.addDataHandler(new Course("Business Introduction", "$ 350", "$ 199", "4.6", R.drawable.orange_background, "Business"));
+        dbHandler.addDataHandler(new Course("Business Management", "$ 250", "$ 99", "3.8", R.drawable.orange_background, "Business"));
     }
 
     private boolean checkLogin() {

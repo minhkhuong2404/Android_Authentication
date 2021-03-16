@@ -3,12 +3,16 @@ package com.example.authentication.Home;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +25,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +37,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.authentication.Course;
+import com.example.authentication.DataHandler;
 import com.example.authentication.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +76,9 @@ public class Home extends Fragment {
     private CourseAdapter mCourseAdapter;
     private List<Course> mCourses;
     private List<Course> mCoursesBusiness;
+    private ImageView imageview;
 
+    private SharedPreferences sharedPreferences ;
     public Home() {
         // Required empty public constructor
     }
@@ -107,6 +119,10 @@ public class Home extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        String ImageUri = sharedPreferences.getString("imagePreferance", "photo");
+
         super.onViewCreated(view, savedInstanceState);
         rvCourses = view.findViewById(R.id.rv_course_design);
         rvCoursesBusiness = view.findViewById(R.id.rv_course_business);
@@ -114,14 +130,8 @@ public class Home extends Fragment {
 //        someTextView.setPaintFlags(someTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         mCourses = new ArrayList<>();
-        mCourses.add(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Business Master Class","$ 440", "$ 299", "4.8", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Adobe XD Masterclass","$ 140", "$ 99", "4.8", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Photoshop CC Masterclass","$ 540", "$ 399", "4.5", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Illustrator CC Masterclass","$ 640", "$ 499", "4.8", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCourses.add(new Course("Premiere Pro CC Masterclass","$ 849", "$ 599", "4.7", getContext().getResources().getDrawable(R.drawable.course_image)));
 
+        mCourses = new DataHandler(getContext(), null, null,1).loadDataHandler("Design");
         mCourseAdapter = new CourseAdapter(getContext(), mCourses);
 
         rvCourses.setAdapter(mCourseAdapter);
@@ -130,9 +140,7 @@ public class Home extends Fragment {
         rvCourses.setLayoutManager(linearLayoutManager);
 
         mCoursesBusiness = new ArrayList<>();
-        mCoursesBusiness.add(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCoursesBusiness.add(new Course("Business Introduction", "$ 350", "$ 199", "4.6", getContext().getResources().getDrawable(R.drawable.course_image)));
-        mCoursesBusiness.add(new Course("Business Management", "$ 250", "$ 99", "3.8", getContext().getResources().getDrawable(R.drawable.course_image)));
+        mCoursesBusiness = new DataHandler(getContext(), null, null,1).loadDataHandler("Business");
 
         mCourseAdapter = new CourseAdapter(getContext(), mCoursesBusiness);
 
@@ -141,9 +149,13 @@ public class Home extends Fragment {
         LinearLayoutManager linearLayoutManagerBusiness = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvCoursesBusiness.setLayoutManager(linearLayoutManagerBusiness);
 
-        ImageView imageView = getView().findViewById(R.id.avatar);
+        imageview = getView().findViewById(R.id.avatar);
+        imageview.setOnClickListener(v -> onLaunchPhoto());
 
-        imageView.setOnClickListener(v -> onLaunchPhoto());
+        if (!ImageUri.equals("photo")) {
+            Bitmap bitmap = decodeBase64(ImageUri);
+            imageview.setImageBitmap(bitmap);
+        }
     }
 
     public void onLaunchPhoto() {
@@ -177,44 +189,33 @@ public class Home extends Fragment {
             }
         });
         builder.show();
-
-//        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(pickPhoto , 0);
-//
-//        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
-//                == PackageManager.PERMISSION_DENIED){
-//            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, 1);
-//        } else {
-//            dispatchTakePictureIntent();
-//        }
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, 1);
-            }
-        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        ImageView imageview = getView().findViewById(R.id.avatar);
+
+        imageview = getView().findViewById(R.id.avatar);
         switch(requestCode) {
             case 0:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    imageview.setImageURI(selectedImage);
+//                    getContext().grantUriPermission(getContext().getPackageName(), selectedImage, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+//                    getContext().getContentResolver().takePersistableUriPermission(selectedImage, takeFlags);
+//
+//                    SharedPreferences preferences =
+//                            PreferenceManager.getDefaultSharedPreferences(getContext());
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putString("image", String.valueOf(selectedImage));
+//                    editor.apply();
+
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("imagePreferance", encodeTobase64(loadFromUri(selectedImage)));
+                    editor.commit();
+                    imageview.setImageBitmap(loadFromUri(selectedImage));
+
                 }
 
                 break;
@@ -223,30 +224,51 @@ public class Home extends Fragment {
                     Bundle bundle = imageReturnedIntent.getExtras();
                     Bitmap bmp = (Bitmap) bundle.get("data");
                     Bitmap resized = Bitmap.createScaledBitmap(bmp, 40,40, true);
+
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("imagePreferance", encodeTobase64(resized));
+                    editor.commit();
+
                     imageview.setImageBitmap(resized);
                 }
                 break;
         }
     }
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
-    String mCurrentPhotoPath;
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immage = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
 
-    private File createImageFile() throws IOException {
-        File storageDir = Environment.getExternalStorageDirectory();
-        File image = File.createTempFile(
-                "example",  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
+        Log.d("Image Log:", imageEncoded);
+        return imageEncoded;
+    }
+
+    // method for base64 to bitmap
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 }

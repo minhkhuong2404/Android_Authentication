@@ -22,25 +22,6 @@ import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.main_activity);
-////        //Initialize Bottom Navigation View.
-//        BottomNavigationView navView = findViewById(R.id.bottomNav_view);
-//        navView.setOnNavigationItemSelectedListener(
-//                navigation
-//        );
-//        //Pass the ID's of Different destinations
-//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home, R.id.navigation_notification, R.id.navigation_profile, R.id.navigation_search )
-//                .build();
-//        //Initialize NavController.
-//        NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(navView, navController);
-
-//    }
     BottomNavigationView bottomNavigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,14 +7,19 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.authentication.LogIn;
+import com.example.authentication.MyCourses.MyCourses;
 import com.example.authentication.R;
+import com.example.authentication.Search.Search;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +37,7 @@ public class Profile extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button signOutButton;
+    private TextView historyActivity;
 
     public Profile() {
         // Required empty public constructor
@@ -81,10 +87,30 @@ public class Profile extends Fragment {
                 switchToLogIn();
             }
         });
+
+        historyActivity = view.findViewById(R.id.setting_activity_history);
+        historyActivity.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                switchToMyCourse();
+            }
+        });
+
     }
 
     private void switchToLogIn() {
         Intent switchToLogIn = new Intent(getActivity(), LogIn.class);
         startActivity(switchToLogIn);
     }
+
+    private void switchToMyCourse() {
+        Fragment fragment = new MyCourses();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.myContainer, fragment, "my_course");
+        fragmentTransaction.addToBackStack("my_course");
+        fragmentTransaction.commit();
+    }
+
 }

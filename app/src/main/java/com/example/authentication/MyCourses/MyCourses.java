@@ -1,8 +1,12 @@
-package com.example.authentication.Explorer;
+package com.example.authentication.MyCourses;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,25 +16,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.example.authentication.Course;
 import com.example.authentication.DataHandler;
+import com.example.authentication.Explorer.CourseAdapterExplorer;
+import com.example.authentication.Explorer.Explorer;
 import com.example.authentication.R;
 import com.example.authentication.Search.Search;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Explorer#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Explorer extends Fragment {
+public class MyCourses extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,11 +37,15 @@ public class Explorer extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String[] collections = {"STUDYING", "COLLECTION"};
     private RecyclerView rvCourses;
-    private CourseAdapterExplorer mCourseAdapterExplorer;
+    private RecyclerView rvCollection;
+    private MyCoursesAdapter mCourseAdapterExplorer;
+    private MyCourseCollectionAdapter myCourseCollectionAdapter;
     private List<Course> mCourses;
+    private List<CollectionItem> item;
 
-    public Explorer() {
+    public MyCourses() {
         // Required empty public constructor
     }
 
@@ -80,39 +80,48 @@ public class Explorer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explorer, container, false);
+        return inflater.inflate(R.layout.my_course, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rvCourses = view.findViewById(R.id.rv_course_explorer);
+        rvCourses = view.findViewById(R.id.rv_my_courses);
+        rvCollection  = view.findViewById(R.id.rv_collection);
 
         mCourses = new ArrayList<>();
         mCourses = new DataHandler(getContext(), null, null,1).loadDataHandler("All");
 
-        mCourseAdapterExplorer = new CourseAdapterExplorer(getContext(), mCourses);
+        mCourseAdapterExplorer = new MyCoursesAdapter(getContext(), mCourses);
 
         rvCourses.setAdapter(mCourseAdapterExplorer);
+
+        item = new ArrayList<>();
+        item.add(new CollectionItem("STUDYING"));
+        item.add(new CollectionItem("COLLECTION"));
+
+        myCourseCollectionAdapter = new MyCourseCollectionAdapter(getContext(), item);
+        rvCollection.setAdapter(myCourseCollectionAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvCourses.setLayoutManager(linearLayoutManager);
 
-        TextView searchButton = view.findViewById(R.id.search_explorer_btn);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvCollection.setLayoutManager(linearLayoutManager2);
+
+        TextView searchButton = view.findViewById(R.id.back_btn_my_courses);
         searchButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                switchToSearch();
+                backToSettings();
             }
         });
+
+
     }
 
-    private void switchToSearch() {
-        Fragment fragment = new Search();
+    private void backToSettings() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.myContainer, fragment, "Tag");
-        fragmentTransaction.addToBackStack("Tag");
-        fragmentTransaction.commit();
+        fragmentManager.popBackStack();
     }
 }

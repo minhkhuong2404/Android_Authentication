@@ -3,19 +3,23 @@ package com.example.authentication;
 import android.graphics.drawable.Drawable;
 import android.view.DragAndDropPermissions;
 
+import static java.security.AccessController.getContext;
+
 public class Course {
     private String courseName;
     private String beforeSalePrice;
     private String afterSalePrice;
     private String rate;
-    private Drawable courseImage;
+    private int courseImage;
+    private String category;
 
-    public Course(String courseName, String beforeSalePrice, String afterSalePrice, String rate, Drawable courseImage) {
+    public Course(String courseName, String beforeSalePrice, String afterSalePrice, String rate, int courseImage, String category) {
         this.courseName = courseName;
         this.beforeSalePrice = beforeSalePrice;
         this.afterSalePrice = afterSalePrice;
         this.rate = rate;
         this.courseImage = courseImage;
+        this.category = category;
     }
 
     public String getCourseName() {
@@ -50,11 +54,19 @@ public class Course {
         this.rate = rate;
     }
 
-    public Drawable getCourseImage() {
+    public int getCourseImage() {
         return courseImage;
     }
 
-    public void setCourseImage(Drawable courseImage) {
+    public void setCourseImage(int courseImage) {
         this.courseImage = courseImage;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -44,7 +44,7 @@ public class CourseAdapterExplorer extends RecyclerView.Adapter<CourseAdapterExp
         holder.tvBeforeSalePrice.setText(course.getBeforeSalePrice());
         holder.tvAfterSalePrice.setText(course.getAfterSalePrice());
         holder.tvRate.setText(course.getRate());
-        holder.tvCourseImage.setBackground(course.getCourseImage());
+        holder.tvCourseImage.setBackgroundResource(course.getCourseImage());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.authentication.Search;
+package com.example.authentication.MyCourses;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -12,32 +12,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.authentication.Course;
-import com.example.authentication.Explorer.CourseAdapterExplorer;
-import com.example.authentication.Notification.NotificationItem;
 import com.example.authentication.R;
 
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
+public class MyCoursesAdapter extends RecyclerView.Adapter<MyCoursesAdapter.MyCoursesViewHolder> {
     private static final String TAG = "CourseAdapter";
     private List<Course> mCourses;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
-    public SearchAdapter(Context context, List<Course> data) {
+    public MyCoursesAdapter(Context context, List<Course> data) {
         mContext = context;
         mCourses = data;
         mLayoutInflater = LayoutInflater.from(context);
     }
     @NonNull
     @Override
-    public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyCoursesAdapter.MyCoursesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mLayoutInflater.inflate(R.layout.course_explorer, parent, false);
-        return new SearchAdapter.SearchViewHolder(itemView);
+        return new MyCoursesAdapter.MyCoursesViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyCoursesAdapter.MyCoursesViewHolder holder, int position) {
         Course course = mCourses.get(position);
 
         holder.tvCourseName.setText(course.getCourseName());
@@ -52,14 +50,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return mCourses.size();
     }
 
-    public class SearchViewHolder extends RecyclerView.ViewHolder{
+    public class MyCoursesViewHolder extends RecyclerView.ViewHolder{
         private TextView tvCourseName;
         private TextView tvAfterSalePrice;
         private TextView tvBeforeSalePrice;
         private TextView tvRate;
         private TextView tvCourseImage;
 
-        public SearchViewHolder(@NonNull View itemView) {
+        public MyCoursesViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvCourseName = itemView.findViewById(R.id.course_name_explorer);
