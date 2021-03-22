@@ -1,5 +1,6 @@
 package com.example.authentication;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,12 +12,11 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.security.AccessController.getContext;
-
 public class DataHandler extends SQLiteOpenHelper {
+    private ContentResolver myCR;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "course.db";
-    public static final String Table_couse = "Courses";
+    public static final String Table_course = "Courses";
     public static final String Course_name = "CourseName";
     public static final String Before_sale_price = "BeforeSalePrice";
     public static final String After_sale_price = "AfterSalePrice";
@@ -25,33 +25,42 @@ public class DataHandler extends SQLiteOpenHelper {
 
     public DataHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        myCR = context.getContentResolver();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_COURSE_TABLE = "CREATE TABLE IF NOT EXISTS " + Table_couse + "(" + Course_name + " TEXT PRIMARY KEY,"
+        String CREATE_COURSE_TABLE = "CREATE TABLE IF NOT EXISTS " + Table_course + "(" + Course_name + " TEXT PRIMARY KEY,"
                 + Before_sale_price + " TEXT," + After_sale_price + " TEXT," + Rate + " TEXT," + Category + " TEXT)";
         db.execSQL(CREATE_COURSE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + Table_couse);
+        db.execSQL("DROP TABLE IF EXISTS " + Table_course);
         onCreate(db);
     }
 
     public List<Course> loadDataHandler(String course) {
         List<Course> courses = new ArrayList<>();
-        String query = "";
-        if (!course.equals("All")) {
-            query = "SELECT * FROM " + Table_couse + " WHERE " + Category + " = " + "'" + course + "'";
-        } else {
-            query = "SELECT * FROM " + Table_couse;
+        String[] projection = {Course_name, Before_sale_price, After_sale_price, Rate, Category};
+        String selection = "Category = \"" + course + "\"";
+
+//        String query = "";
+//        if (!course.equals("All")) {
+//            query = "SELECT * FROM " + Table_course + " WHERE " + Category + " = " + "'" + course + "'";
+//        } else {
+//            query = "SELECT * FROM " + Table_course;
+//        }
+
+//        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor;
+        if (!course.equals("All")){
+            cursor = myCR.query(CourseProvider.CONTENT_URI, projection, selection, null, null);
+        } else  {
+            cursor = myCR.query(CourseProvider.CONTENT_URI, projection, null, null, null);
         }
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -65,7 +74,7 @@ public class DataHandler extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        db.close();
+//        db.close();
         return courses;
     }
 
@@ -76,8 +85,33 @@ public class DataHandler extends SQLiteOpenHelper {
         values.put(After_sale_price, course.getAfterSalePrice());
         values.put(Rate, course.getRate());
         values.put(Category, course.getCategory());
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insertWithOnConflict(Table_couse, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-        db.close();
+        myCR.insert(CourseProvider.CONTENT_URI, values);
+    }
+
+    public boolean deleteDataHandler(String course_name) {
+        boolean result = false;
+        String selection = "Course_name = \"" + course_name +"\"";
+        int rowsDeleted =
+                myCR.delete(CourseProvider.CONTENT_URI,selection, null);
+        if (rowsDeleted > 0)
+            result = true;
+        return result;
+    }
+    public boolean updateDataHandler(String course_name, String before_sale_price, String after_sale_price, String rate, String category) {
+
+        ContentValues values = new ContentValues();
+        values.put(Course_name, course_name);
+        values.put(Before_sale_price, before_sale_price);
+        values.put(After_sale_price, after_sale_price);
+        values.put(Rate, rate);
+        values.put(Category, category);
+
+        boolean result = false;
+        String selection = "Course_name = \"" + course_name + "\"";
+        int rowsUpdated =
+                myCR.update(CourseProvider.CONTENT_URI,values,selection,null);
+        if (rowsUpdated > 0)
+            result = true;
+        return result;
     }
 }

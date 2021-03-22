@@ -1,5 +1,6 @@
 package com.example.authentication;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Handler;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,7 +19,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskExecutors;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +44,7 @@ public class PhoneNumber extends AppCompatActivity {
     @BindView(R.id.phone_number_continue_btn) Button addPhoneNumber;
     @BindView(R.id.enter_phone_number_field) EditText phoneNumber;
     private String lastChar = "";
-
+    public String phone = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +67,16 @@ public class PhoneNumber extends AppCompatActivity {
         addPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (TextUtils.isEmpty(phoneNumber.getText().toString()) && phoneNumber.getText().toString().length() != 12) {
+                    // when mobile number text field is empty
+                    // displaying a toast message.
+                    Toast.makeText(PhoneNumber.this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // if the text field is not empty we are calling our
+                    // send OTP method for getting OTP from Firebase.
+                    phone = "+1" + phoneNumber.getText().toString().replace("-","");
+
+                }
                 signup();
             }
         });
@@ -80,7 +104,7 @@ public class PhoneNumber extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int digits = phoneNumber.getText().toString().length();
-                Log.d("LENGTH",""+digits);
+//                Log.d("LENGTH",""+digits);
                 if (!lastChar.equals("-")) {
                     if (digits == 3 || digits == 7) {
                         phoneNumber.append("-");
@@ -94,7 +118,6 @@ public class PhoneNumber extends AppCompatActivity {
         });
 
     }
-
     private void backToNewAccount() {
         Intent backToNewAccount = new Intent(this, NewAccount.class);
         startActivity(backToNewAccount);
@@ -102,6 +125,7 @@ public class PhoneNumber extends AppCompatActivity {
 
     private void switchToVerification() {
         Intent intent = new Intent(this, Verification.class);
+        intent.putExtra("phone", phone);
         startActivity(intent);
     }
 
@@ -148,13 +172,15 @@ public class PhoneNumber extends AppCompatActivity {
 
     public boolean validate() {
         boolean valid = true;
-        String phone = phoneNumber.getText().toString();
+        String phone2 = phoneNumber.getText().toString();
 
-        if (phone.length() != 12 && phone.charAt(3) != '-' && phone.charAt(7) != '-') {
-            phoneNumber.setError("Enter a valid phone number");
-            valid = false;
-        } else {
-            phoneNumber.setError(null);
+        if (phone2 != null ) {
+            if (phone2.length() != 12 && phone2.charAt(3) != '-' && phone2.charAt(7) != '-') {
+                phoneNumber.setError("Enter a valid phone number");
+                valid = false;
+            } else {
+                phoneNumber.setError(null);
+            }
         }
 
         return valid;

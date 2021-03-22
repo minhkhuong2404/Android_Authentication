@@ -1,6 +1,7 @@
 package com.example.authentication.Home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -46,6 +47,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -71,6 +75,7 @@ public class Home extends Fragment {
     public String photoFileName = "photo.jpg";
     File photoFile;
 
+    private TextView tvUsername;
     private RecyclerView rvCourses;
     private RecyclerView rvCoursesBusiness;
     private CourseAdapter mCourseAdapter;
@@ -78,6 +83,7 @@ public class Home extends Fragment {
     private List<Course> mCoursesBusiness;
     private ImageView imageview;
 
+    private String username = "";
     private SharedPreferences sharedPreferences ;
     public Home() {
         // Required empty public constructor
@@ -117,6 +123,7 @@ public class Home extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -128,6 +135,24 @@ public class Home extends Fragment {
         rvCoursesBusiness = view.findViewById(R.id.rv_course_business);
 //        TextView someTextView =view.findViewById(R.id.before_sale_price);
 //        someTextView.setPaintFlags(someTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        Date date = new Date();
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        
+        CharSequence time_of_day = "";
+        if (6 <= hour && hour <= 12) {
+            time_of_day = "Good Morning";
+        } else if ( 12 < hour && hour <= 18) {
+            time_of_day = "Good Afternoon";
+        } else if (18 < hour && hour <= 24) {
+            time_of_day = "Good Evening";
+        }
+        
+        tvUsername = view.findViewById(R.id.username);
+        CharSequence removeEmailDomain = mParam1.split("@")[0];
+        tvUsername.setText(time_of_day + ", " + removeEmailDomain);
 
         mCourses = new ArrayList<>();
 

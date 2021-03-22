@@ -1,7 +1,10 @@
 package com.example.authentication;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -17,8 +20,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ybs.passwordstrengthmeter.PasswordStrength;
 
 import butterknife.BindView;
@@ -35,12 +45,16 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.password_strength) TextView strengthView;
 
+    private static String email = "";
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_password);
         unbinder = ButterKnife.bind(this);
 
+        mAuth = FirebaseAuth.getInstance();
         backToNewAccount.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -79,7 +93,6 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
                 finish();
             }
         });
-
 
     }
 
@@ -123,6 +136,26 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
         Log.d("valid", "pw_successs");
         signUpButton.setEnabled(true);
         Toast.makeText(this, "New account created", Toast.LENGTH_SHORT).show();
+        email = getIntent().getStringExtra("email");
+        System.out.println(email + " : " + passwordText.getText().toString());
+
+        mAuth.createUserWithEmailAndPassword(email, passwordText.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Account", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("Account", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(CreatePassword.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
         setResult(RESULT_OK, null);
 
     }

@@ -1,6 +1,7 @@
 package com.example.authentication.Profile;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -38,6 +39,7 @@ public class Profile extends Fragment {
     private String mParam2;
     private Button signOutButton;
     private TextView historyActivity;
+    private TextView notificationActivity;
 
     public Profile() {
         // Required empty public constructor
@@ -97,6 +99,14 @@ public class Profile extends Fragment {
             }
         });
 
+        notificationActivity = view.findViewById(R.id.setting_notifications);
+        notificationActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToNotification();
+            }
+        });
+
     }
 
     private void switchToLogIn() {
@@ -110,6 +120,14 @@ public class Profile extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.myContainer, fragment, "my_course");
         fragmentTransaction.addToBackStack("my_course");
+        fragmentTransaction.commit();
+    }
+
+    private void switchToNotification() {
+        Fragment fragment = new com.example.authentication.Notification.Notification();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.myContainer, fragment, "notification");
         fragmentTransaction.commit();
     }
 

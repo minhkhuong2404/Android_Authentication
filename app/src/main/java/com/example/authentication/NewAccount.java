@@ -1,6 +1,7 @@
 package com.example.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.authentication.Walkthrough.SlideActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +31,7 @@ public class NewAccount extends AppCompatActivity {
     @BindView(R.id.new_account_continue_btn) Button signUpButton;
     @BindView(R.id.enter_email_field) EditText emailText;
     @BindView(R.id.sign_in_if_exists) TextView loginText;
+    @BindView(R.id.back_btn_new_account) Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,7 @@ public class NewAccount extends AppCompatActivity {
         emailText.setHint("Your Email");
         emailText.requestFocus();
 
-        emailText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        emailText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -64,16 +68,30 @@ public class NewAccount extends AppCompatActivity {
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToWalkthrough();
+                finish();
+            }
+        });
+
     }
 
     private void switchToCreatePassword() {
         Intent switchToCreatePassword = new Intent(this, CreatePassword.class);
+        switchToCreatePassword.putExtra("email", emailText.getText().toString());
         startActivity(switchToCreatePassword);
     }
 
     private void switchToLogIn() {
         Intent intent = new Intent(this, LogIn.class);
         startActivity(intent);
+    }
+
+    private void switchToWalkthrough() {
+        Intent switchToWalk = new Intent(this, SlideActivity.class);
+        startActivity(switchToWalk);
     }
 
     private boolean signup() {
@@ -87,7 +105,11 @@ public class NewAccount extends AppCompatActivity {
 
         onSignupSuccess();
         Toast.makeText
-                (this, "Your account is available to use", Toast.LENGTH_SHORT).show();
+                (this, "Your account " + emailText.getText().toString(), Toast.LENGTH_SHORT).show();
+//        Intent intent2 = new Intent("emailAddress");
+//        intent2.putExtra("email", emailText.getText().toString());
+//        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent2);
+
         switchToCreatePassword();
 
         return result[0];

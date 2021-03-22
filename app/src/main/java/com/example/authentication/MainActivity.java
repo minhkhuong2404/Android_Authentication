@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         bottomNavigation = findViewById(R.id.bottomNav_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        openFragment(Home.newInstance("", ""));
+        String username = getIntent().getStringExtra("username");
+        openFragment(Home.newInstance(username, ""));
     }
 
     public void openFragment(Fragment fragment) {
