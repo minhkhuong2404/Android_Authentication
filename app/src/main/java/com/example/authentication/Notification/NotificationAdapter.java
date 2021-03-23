@@ -37,7 +37,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         NotificationItem course = mNotifications.get(position);
 
-        holder.tvNotificationIcon.setBackground(course.getNotificationIcon());
+        holder.tvNotificationIcon.setBackgroundResource(course.getNotificationIcon());
         holder.tvNotificationInfo.setText(course.getNotificationInformation());
         holder.tvNotificationTime.setText(course.getNotificationTime());
 

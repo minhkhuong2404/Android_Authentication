@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.authentication.Home.Home;
+import com.example.authentication.Notification.NotificationItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -66,6 +67,7 @@ public class LogIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addCourse();
+                addNotification();
                 checkLogin();
             }
         });
@@ -86,18 +88,24 @@ public class LogIn extends AppCompatActivity {
 
     public void addCourse() {
         DataHandler dbHandler = new DataHandler(this, null, null, 1);
-        dbHandler.addDataHandler(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Business Master Class","$ 440", "$ 299", "4.8", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Adobe XD Masterclass","$ 140", "$ 99", "4.8", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Photoshop CC Masterclass","$ 540", "$ 399", "4.5", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Illustrator CC Masterclass","$ 640", "$ 499", "4.8", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Premiere Pro CC Masterclass","$ 849", "$ 599", "4.7", R.drawable.orange_background, "Design"));
-        dbHandler.addDataHandler(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", R.drawable.orange_background, "Business"));
-        dbHandler.addDataHandler(new Course("Business Introduction", "$ 350", "$ 199", "4.6", R.drawable.orange_background, "Business"));
-        dbHandler.addDataHandler(new Course("Business Management", "$ 250", "$ 99", "3.8", R.drawable.orange_background, "Business"));
+//        dbHandler.deleteAllDataHandler();
+        dbHandler.addDataHandler(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", R.drawable.sketch, "Design"));
+        dbHandler.addDataHandler(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", R.drawable.figma, "Design"));
+        dbHandler.addDataHandler(new Course("Business Master Class","$ 440", "$ 299", "4.8", R.drawable.blue_background, "Design"));
+        dbHandler.addDataHandler(new Course("Adobe XD Masterclass","$ 140", "$ 99", "4.8", R.drawable.xd, "Design"));
+        dbHandler.addDataHandler(new Course("Photoshop CC Masterclass","$ 540", "$ 399", "4.5", R.drawable.photoshop, "Design"));
+        dbHandler.addDataHandler(new Course("Illustrator CC Masterclass","$ 640", "$ 499", "4.8", R.drawable.illustrator, "Design"));
+        dbHandler.addDataHandler(new Course("Premiere Pro CC Masterclass","$ 849", "$ 599", "4.7", R.drawable.premiere, "Design"));
+        dbHandler.addDataHandler(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", R.drawable.business1, "Business"));
+        dbHandler.addDataHandler(new Course("Business Introduction", "$ 350", "$ 199", "4.6", R.drawable.business2, "Business"));
+        dbHandler.addDataHandler(new Course("Business Management", "$ 250", "$ 99", "3.8", R.drawable.yellow_background, "Business"));
     }
 
+    public void addNotification() {
+        NotificationHandler notifHandler = new NotificationHandler(this, null,null,1);
+//        notifHandler.deleteAllDataHandler();
+    }
+    
     private boolean checkLogin() {
         Log.d("Tag", "Login");
         final boolean[] result = new boolean[1];
@@ -131,7 +139,6 @@ public class LogIn extends AppCompatActivity {
 
     private void switchToHome() {
         Intent switchToHome = new Intent(this, MainActivity.class);
-        switchToHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
         switchToHome.putExtra("username", loginEmail.getText().toString());
         startActivity(switchToHome);
     }
@@ -191,6 +198,5 @@ public class LogIn extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
     }
 }

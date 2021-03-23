@@ -64,6 +64,21 @@ public class Verification extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
             otpFull = message;
             System.out.println("Your otp: " + otpFull);
+//            EditText code1 = findViewById(R.id.code_1);
+//            EditText code2 = findViewById(R.id.code_2);
+//            EditText code3 = findViewById(R.id.code_3);
+//            EditText code4 = findViewById(R.id.code_4);
+//            EditText code5 = findViewById(R.id.code_5);
+//            EditText code6 = findViewById(R.id.code_6);
+
+            if (!otpFull.equals("")) {
+                code1.setText(String.valueOf(otpFull.charAt(0)));
+                code2.setText(String.valueOf(otpFull.charAt(1)));
+                code3.setText(String.valueOf(otpFull.charAt(2)));
+                code4.setText(String.valueOf(otpFull.charAt(3)));
+                code5.setText(String.valueOf(otpFull.charAt(4)));
+                code6.setText(String.valueOf(otpFull.charAt(5)));
+            }
 
         }
     };
@@ -88,12 +103,12 @@ public class Verification extends AppCompatActivity {
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
                 mMessageReceiver, new IntentFilter("Notification"));
 
-        EditText code1 = findViewById(R.id.code_1);
-        EditText code2 = findViewById(R.id.code_2);
-        EditText code3 = findViewById(R.id.code_3);
-        EditText code4 = findViewById(R.id.code_4);
-        EditText code5 = findViewById(R.id.code_5);
-        EditText code6 = findViewById(R.id.code_6);
+//        EditText code1 = findViewById(R.id.code_1);
+//        EditText code2 = findViewById(R.id.code_2);
+//        EditText code3 = findViewById(R.id.code_3);
+//        EditText code4 = findViewById(R.id.code_4);
+//        EditText code5 = findViewById(R.id.code_5);
+//        EditText code6 = findViewById(R.id.code_6);
 
         resendCodeText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,16 +116,13 @@ public class Verification extends AppCompatActivity {
                 LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
                         mMessageReceiver, new IntentFilter("Notification"));
 
-                if (otpFull != null) {
-                    if (otpFull.length() == 6) {
-
-                        code1.setText(String.valueOf(otpFull.charAt(0)));
-                        code2.setText(String.valueOf(otpFull.charAt(1)));
-                        code3.setText(String.valueOf(otpFull.charAt(2)));
-                        code4.setText(String.valueOf(otpFull.charAt(3)));
-                        code5.setText(String.valueOf(otpFull.charAt(4)));
-                        code6.setText(String.valueOf(otpFull.charAt(5)));
-                    }
+                if (!otpFull.equals("")) {
+                    code1.setText(String.valueOf(otpFull.charAt(0)));
+                    code2.setText(String.valueOf(otpFull.charAt(1)));
+                    code3.setText(String.valueOf(otpFull.charAt(2)));
+                    code4.setText(String.valueOf(otpFull.charAt(3)));
+                    code5.setText(String.valueOf(otpFull.charAt(4)));
+                    code6.setText(String.valueOf(otpFull.charAt(5)));
                 }
             }
         });
@@ -128,7 +140,7 @@ public class Verification extends AppCompatActivity {
                 } else {
                     // if OTP field is not empty calling
                     // method to verify the OTP.
-                    System.out.println(String.join("", letter) + " --- " + otpFull);
+                    Log.d("Check OTP", String.join("", letter) + " --- " + otpFull);
                     if (String.join("", letter) != null && (otpFull != null)) {
                         if (otpFull.equals(String.join("", letter))) {
                             Toast.makeText(getApplicationContext(), "Successfully verify OTP", Toast.LENGTH_SHORT).show();
@@ -279,6 +291,5 @@ public class Verification extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
     }
 }

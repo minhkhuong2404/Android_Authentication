@@ -135,26 +135,27 @@ public class PhoneNumber extends AppCompatActivity {
         if (!validate()) {
             onSignUpFailed();
             return false;
+        }  else {
+            addPhoneNumber.setEnabled(false);
+
+            final ProgressDialog progressDialog = new ProgressDialog(PhoneNumber.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Sending code");
+            progressDialog.show();
+
+
+            new Handler().postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            onSignupSuccess();
+                            progressDialog.dismiss();
+                            result[0] = true;
+                            switchToVerification();
+                        }
+                    }, 1000);
+            return result[0];
         }
-        addPhoneNumber.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(PhoneNumber.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Sending code");
-        progressDialog.show();
-
-
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        onSignupSuccess();
-                        progressDialog.dismiss();
-                        result[0] = true;
-                        switchToVerification();
-                    }
-                }, 1000);
-        return result[0];
     }
 
     public void onSignupSuccess() {
@@ -174,18 +175,31 @@ public class PhoneNumber extends AppCompatActivity {
         boolean valid = true;
         String phone2 = phoneNumber.getText().toString();
 
-        if (phone2 != null ) {
+        String normalPhone = phone2.replace("-", "");
+
+        if (phone2 != null && isNumeric(normalPhone)) {
             if (phone2.length() != 12 && phone2.charAt(3) != '-' && phone2.charAt(7) != '-') {
                 phoneNumber.setError("Enter a valid phone number");
                 valid = false;
             } else {
                 phoneNumber.setError(null);
             }
+        } else {
+            phoneNumber.setError("Enter a valid phone number");
+            valid = false;
         }
 
         return valid;
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

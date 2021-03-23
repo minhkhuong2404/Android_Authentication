@@ -5,12 +5,22 @@ import android.graphics.drawable.Drawable;
 public class NotificationItem {
     private String notificationTime;
     private String notificationInformation;
-    private Drawable notificationIcon;
+    private int notificationIcon;
+    private String notificationCreationTime;
 
-    public NotificationItem(String notificationTime, String notificationInformation, Drawable notificationIcon) {
+    public NotificationItem(String notificationTime, String notificationInformation, int notificationIcon, String notificationCreationTime) {
         this.notificationTime = notificationTime;
         this.notificationInformation = notificationInformation;
         this.notificationIcon = notificationIcon;
+        this.notificationCreationTime = notificationCreationTime;
+    }
+
+    public String getNotificationCreationTime() {
+        return notificationCreationTime;
+    }
+
+    public void setNotificationCreationTime(String notificationCreationTime) {
+        this.notificationCreationTime = notificationCreationTime;
     }
 
     public String getNotificationTime() {
@@ -29,11 +39,11 @@ public class NotificationItem {
         this.notificationInformation = notificationInformation;
     }
 
-    public Drawable getNotificationIcon() {
+    public int getNotificationIcon() {
         return notificationIcon;
     }
 
-    public void setNotificationIcon(Drawable notificationIcon) {
+    public void setNotificationIcon(int notificationIcon) {
         this.notificationIcon = notificationIcon;
     }
 }

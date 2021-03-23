@@ -67,6 +67,7 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
         passwordText.addTextChangedListener(this);
         passwordText.setHint("Your Password");
         passwordText.requestFocus();
+        passwordText.requestFocus();
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +106,12 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
         Intent intent = new Intent(this, PhoneNumber.class);
         startActivity(intent);
     }
+
+    private void switchToLogIn() {
+        Intent intent = new Intent(this, LogIn.class);
+        startActivity(intent);
+    }
+
     private boolean signup() {
         Log.d("Tag", "Password");
         final boolean[] result = new boolean[1];
@@ -135,9 +142,8 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
     public void onSignupSuccess() {
         Log.d("valid", "pw_successs");
         signUpButton.setEnabled(true);
-        Toast.makeText(this, "New account created", Toast.LENGTH_SHORT).show();
         email = getIntent().getStringExtra("email");
-        System.out.println(email + " : " + passwordText.getText().toString());
+        Log.d("Email : Password", email + " : " + passwordText.getText().toString());
 
         mAuth.createUserWithEmailAndPassword(email, passwordText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -146,12 +152,14 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Account", "createUserWithEmail:success");
+                            Toast.makeText(CreatePassword.this, "New account created", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Account", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(CreatePassword.this, "Authentication failed.",
+                            Toast.makeText(CreatePassword.this, "No Account Created. Please login",
                                     Toast.LENGTH_SHORT).show();
+                            switchToLogIn();
                         }
                     }
                 });
@@ -225,6 +233,5 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
     }
 }

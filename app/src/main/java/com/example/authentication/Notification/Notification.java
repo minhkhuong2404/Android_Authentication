@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.authentication.Home.CourseAdapter;
+import com.example.authentication.NotificationHandler;
 import com.example.authentication.R;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,14 +83,11 @@ public class Notification extends Fragment {
         rvNotification = view.findViewById(R.id.rv_notification);
 
         mNotifications = new ArrayList<>();
-
-        mNotifications.add(new NotificationItem("Just now", "You got a new message from Kevin", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("2 hours ago", "Please update your information", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("4 hours ago", "You have a new video course", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("4 hours ago", "You have a new badge", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("7 hours ago", "You have a new video course", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("4 hours ago", "You got a new message from Dave", getContext().getResources().getDrawable(R.drawable.orange_background)));
-        mNotifications.add(new NotificationItem("8 hours ago", "You got a new message from Timmy", getContext().getResources().getDrawable(R.drawable.orange_background)));
+        try {
+            mNotifications = new NotificationHandler(getContext(), null, null, 1).loadDataHandler();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         notificationAdapter = new NotificationAdapter(getContext(), mNotifications);
 

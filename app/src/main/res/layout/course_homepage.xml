@@ -76,7 +76,7 @@
                 />
             <Button
                 android:layout_width="45dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:text="Add"
                 android:textSize="8sp"
                 android:paddingVertical="0dp"

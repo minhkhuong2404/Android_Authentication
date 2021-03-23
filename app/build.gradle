@@ -60,4 +60,5 @@ dependencies {
     // Declare the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation "androidx.cardview:cardview:1.0.0"
 }

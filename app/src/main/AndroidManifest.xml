@@ -58,6 +58,14 @@
             android:enabled="true"
             android:exported="true">
         </provider>
+
+        <provider
+            android:name="com.example.authentication.NotificationProvider"
+            android:authorities="com.example.authentication.NotificationProvider"
+            android:enabled="true"
+            android:exported="true">
+        </provider>
+
         <service
             android:name="com.example.authentication.MyFirebaseMessagingService"
             android:exported="false"

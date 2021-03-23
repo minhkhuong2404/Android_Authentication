@@ -1,31 +1,46 @@
 package com.example.authentication;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.authentication.Notification.NotificationItem;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
-
+    public static final SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SharedPreferences sharedPreferences ;
+    private int numberOfMessages = 1;
     /**
      * Called when message is received.
      *
@@ -75,6 +90,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent intent = new Intent("Notification");
             intent.putExtra("notify", remoteMessage.getNotification().getBody());
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            try {
+                sendNotification(remoteMessage.getNotification().getBody());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -138,26 +158,62 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageBody) throws ParseException {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        NotificationHandler notifHandler = new NotificationHandler(this, null,null,1);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
+        // get username
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = sharedPreferences.getString("username", "No name");
+
+        // choose icon depends on the notification title
+        int which_icon = 0;
+        if (messageBody.toLowerCase().contains("message")) {
+            which_icon = R.drawable.message;
+        } else if (messageBody.toLowerCase().contains("video")) {
+            which_icon = R.drawable.videocam;
+        } else if (messageBody.toLowerCase().contains("badge")) {
+            which_icon = R.drawable.badge;
+        } else if (messageBody.toLowerCase().contains("information")) {
+            which_icon = R.drawable.info;
+        } else {
+            which_icon = R.drawable.noti;
+        }
+
+        // add raw datetime to the notification
+        Date date = new Date();
+        String dateStr = inputFormat.format(date);
+        notifHandler.addDataHandler(new NotificationItem(dateStr, messageBody, which_icon, dateStr));
+
+        // load all notification items
+        List<NotificationItem> notificationItems = notifHandler.loadDataHandler();
+
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                        .setContentTitle(getString(R.string.fcm_message))
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // for loop to get all notification items in descending order
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        for (int i = notificationItems.size() - 1; i >= 0; i--) {
+            Date date1 = inputFormat.parse(notificationItems.get(i).getNotificationCreationTime());
+            Notification notificationBuilder =
+                    new NotificationCompat.Builder(this, channelId)
+                            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                            .setContentTitle("E-learning")
+                            .setContentText(notificationItems.get(i).getNotificationInformation())
+                            .setAutoCancel(true)
+                            .setSound(defaultSoundUri)
+                            .setContentIntent(pendingIntent)
+                            .setWhen(date1.getTime())
+                            .setGroup("MESSAGE")
+                            .build();
+            notificationManager.notify(i+1, notificationBuilder);
+        }
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -167,7 +223,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        // create a summary notification to keep all the notifications
+        Notification summaryNotification =
+                new NotificationCompat.Builder(this, channelId)
+                        .setContentTitle("All notifications")
+                        .setContentText(notificationItems.size() + " new messages")
+                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                        .setStyle(new NotificationCompat.InboxStyle()
+                                .addLine(username + "! Check this out")
+                                .setBigContentTitle(notificationItems.size() + " new messages")
+                                .setSummaryText("You have " + notificationItems.size() + " new messages"))
+                        //specify which group this notification belongs to
+                        .setGroup("MESSAGE")
+                        //set this notification as the summary for the group
+                        .setGroupSummary(true)
+                        .build();
+
+        notificationManager.notify(0, summaryNotification);
     }
 
 }

@@ -70,11 +70,6 @@ public class Home extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public final String APP_TAG = "MyCustomApp";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
-    File photoFile;
-
     private TextView tvUsername;
     private RecyclerView rvCourses;
     private RecyclerView rvCoursesBusiness;
@@ -82,7 +77,7 @@ public class Home extends Fragment {
     private List<Course> mCourses;
     private List<Course> mCoursesBusiness;
     private ImageView imageview;
-
+    private String removeEmailDomain = "";
     private String username = "";
     private SharedPreferences sharedPreferences ;
     public Home() {
@@ -151,8 +146,19 @@ public class Home extends Fragment {
         }
         
         tvUsername = view.findViewById(R.id.username);
-        CharSequence removeEmailDomain = mParam1.split("@")[0];
+
+        if (!removeEmailDomain.equals("")) {
+            removeEmailDomain = mParam1.split("@")[0];
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("username", mParam1.split("@")[0]);
+            editor.apply();
+        } else {
+            removeEmailDomain = sharedPreferences.getString("username", "No name");
+        }
         tvUsername.setText(time_of_day + ", " + removeEmailDomain);
+
+
 
         mCourses = new ArrayList<>();
 
