@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="wrap_content"
+    android:id="@+id/background_slide_pager"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/orange_background">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="5dp">
+        <TextView
+            android:id="@+id/explorer_slide_pager_text"
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/white"
+            android:text="Business MasterClass 1"
+            android:textSize="18sp"
+            android:fontFamily="@font/pt_sans_bold"
+            android:padding="10dp"/>
+        <TextView
+            android:id="@+id/category_slide_pager_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_alignParentTop="true"
+            android:text="Business"
+            android:textColor="@color/white"
+            android:layout_marginTop="25dp"
+            android:padding="10dp"
+            android:fontFamily="@font/pt_sans_regular"/>
+        <TextView
+            android:id="@+id/view_slide_pager_text"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:text="VIEW"
+            android:gravity="center"
+            android:layout_marginHorizontal="30dp"
+            android:fontFamily="@font/pt_sans_bold"
+            android:textColor="@color/black"
+            android:padding="0dp"
+            android:layout_marginTop="80dp"
+            android:textSize="12sp"
+            android:background="@drawable/text_field" />
+    </RelativeLayout>
+</LinearLayout>

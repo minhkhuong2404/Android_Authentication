@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.authentication.Provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -12,8 +12,10 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.authentication.Handler.CourseHandler;
+
 public class CourseProvider extends ContentProvider {
-    private static final String AUTHORITY = "com.example.authentication.CourseProvider";
+    private static final String AUTHORITY = "com.example.authentication.Provider.CourseProvider";
     private static final String COURSE_TABLE = "Courses";
     public static final int COURSES = 1;
     public static final int COURSES_CATEGORY = 2;
@@ -28,14 +30,14 @@ public class CourseProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, COURSE_TABLE + "/#",
                 COURSES_CATEGORY);
     }
-    private DataHandler myHandler;
+    private CourseHandler myHandler;
     public CourseProvider() {
     }
 
     private SQLiteDatabase db;
     @Override
     public boolean onCreate() {
-        myHandler = new DataHandler(getContext(), null, null, 1);
+        myHandler = new CourseHandler(getContext(), null, null, 1);
         return false;
     }
 
@@ -43,11 +45,11 @@ public class CourseProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(DataHandler.Table_course);
+        queryBuilder.setTables(CourseHandler.Table_course);
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case COURSES_CATEGORY:
-                queryBuilder.appendWhere(DataHandler.Category + "="
+                queryBuilder.appendWhere(CourseHandler.Category + "="
                         + uri.getLastPathSegment());
                 break;
             case COURSES:
@@ -75,7 +77,7 @@ public class CourseProvider extends ContentProvider {
         long id = 0;
         switch (uriType) {
             case COURSES:
-                id = sqlDB.insertWithOnConflict(DataHandler.Table_course,
+                id = sqlDB.insertWithOnConflict(CourseHandler.Table_course,
                         null, values, SQLiteDatabase.CONFLICT_IGNORE);
                 break;
             default:
@@ -93,7 +95,7 @@ public class CourseProvider extends ContentProvider {
         int rowsDeleted = 0;
         switch (uriType) {
             case COURSES:
-                rowsDeleted = sqlDB.delete(DataHandler.Table_course,
+                rowsDeleted = sqlDB.delete(CourseHandler.Table_course,
                         selection,
                         selectionArgs);
                 break;
@@ -101,12 +103,12 @@ public class CourseProvider extends ContentProvider {
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsDeleted =
-                            sqlDB.delete(DataHandler.Table_course,
+                            sqlDB.delete(CourseHandler.Table_course,
                                     myHandler.Course_name + "=" + id,
                                     null);
                 } else {
                     rowsDeleted =
-                            sqlDB.delete(DataHandler.Table_course,
+                            sqlDB.delete(CourseHandler.Table_course,
                                     myHandler.Course_name + "=" + id
                                             + " and " + selection,
                                     selectionArgs);
@@ -128,7 +130,7 @@ public class CourseProvider extends ContentProvider {
         switch (uriType) {
             case COURSES:
                 rowsUpdated =
-                        sqlDB.update(DataHandler.Table_course,
+                        sqlDB.update(CourseHandler.Table_course,
                                 values,
                                 selection,
                                 selectionArgs);
@@ -137,15 +139,15 @@ public class CourseProvider extends ContentProvider {
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     rowsUpdated =
-                            sqlDB.update(DataHandler.Table_course,
+                            sqlDB.update(CourseHandler.Table_course,
                                     values,
-                                    DataHandler.Course_name + "=" + id,
+                                    CourseHandler.Course_name + "=" + id,
                                     null);
                 } else {
                     rowsUpdated =
-                            sqlDB.update(DataHandler.Table_course,
+                            sqlDB.update(CourseHandler.Table_course,
                                     values,
-                                    DataHandler.Course_name + "=" + id
+                                    CourseHandler.Course_name + "=" + id
                                             + " and "
                                             + selection,
                                     selectionArgs);

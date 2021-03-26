@@ -1,16 +1,12 @@
-package com.example.authentication;
+package com.example.authentication.Authentication;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,8 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.authentication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -66,8 +62,6 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
 
         passwordText.addTextChangedListener(this);
         passwordText.setHint("Your Password");
-        passwordText.requestFocus();
-        passwordText.requestFocus();
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override

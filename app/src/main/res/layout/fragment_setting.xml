@@ -3,21 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile.Profile"
+    tools:context=".Setting.Setting"
     android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/back_btn_notification"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/baseline_arrow_back_ios_new_black_24dp"
-            android:layout_marginStart="15dp" />
         <!-- TODO: Update blank fragment layout -->
         <TextView
             android:layout_width="match_parent"
@@ -26,7 +18,7 @@
             android:textColor="@color/text"
             android:textSize="22sp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/pt_sans_bold"/>
         <TextView

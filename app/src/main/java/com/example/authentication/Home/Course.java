@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.authentication.Home;
 
 import android.graphics.drawable.Drawable;
 import android.view.DragAndDropPermissions;

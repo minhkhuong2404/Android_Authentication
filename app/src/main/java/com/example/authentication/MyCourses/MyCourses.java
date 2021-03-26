@@ -4,29 +4,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.authentication.Course;
-import com.example.authentication.DataHandler;
+import com.example.authentication.Home.Course;
 import com.example.authentication.Explorer.CourseAdapterExplorer;
+import com.example.authentication.Handler.CourseHandler;
 import com.example.authentication.Explorer.Explorer;
 import com.example.authentication.R;
-import com.example.authentication.Search.Search;
+import com.example.authentication.Setting.OnCollectionClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyCourses extends Fragment {
+public class MyCourses extends Fragment implements OnCollectionClickedListener, OnItemClickedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,10 +35,9 @@ public class MyCourses extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String[] collections = {"STUDYING", "COLLECTION"};
     private RecyclerView rvCourses;
     private RecyclerView rvCollection;
-    private MyCoursesAdapter mCourseAdapterExplorer;
+    private CourseAdapterExplorer mCourseAdapterExplorer;
     private MyCourseCollectionAdapter myCourseCollectionAdapter;
     private List<Course> mCourses;
     private List<CollectionItem> item;
@@ -88,12 +85,7 @@ public class MyCourses extends Fragment {
         rvCourses = view.findViewById(R.id.rv_my_courses);
         rvCollection  = view.findViewById(R.id.rv_collection);
 
-        mCourses = new ArrayList<>();
-        mCourses = new DataHandler(getContext(), null, null,1).loadDataHandler("All");
 
-        mCourseAdapterExplorer = new MyCoursesAdapter(getContext(), mCourses);
-
-        rvCourses.setAdapter(mCourseAdapterExplorer);
 
         item = new ArrayList<>();
         item.add(new CollectionItem("STUDYING"));
@@ -101,12 +93,19 @@ public class MyCourses extends Fragment {
 
         myCourseCollectionAdapter = new MyCourseCollectionAdapter(getContext(), item);
         rvCollection.setAdapter(myCourseCollectionAdapter);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvCourses.setLayoutManager(linearLayoutManager);
+        myCourseCollectionAdapter.setOnCollectionClickedListener(this);
 
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvCollection.setLayoutManager(linearLayoutManager2);
+
+        mCourses = new ArrayList<>();
+        mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("All");
+
+        mCourseAdapterExplorer = new CourseAdapterExplorer(getContext(), mCourses);
+        mCourseAdapterExplorer.setClickedListener(this);
+        rvCourses.setAdapter(mCourseAdapterExplorer);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvCourses.setLayoutManager(linearLayoutManager);
 
         TextView searchButton = view.findViewById(R.id.back_btn_my_courses);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -117,11 +116,39 @@ public class MyCourses extends Fragment {
             }
         });
 
-
     }
 
     private void backToSettings() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
+    }
+
+    @Override
+    public void getSelected(CollectionItem collectionItem, int position) {
+        mCourses = new ArrayList<>();
+        if (position == 1){
+            mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("Hacking");
+            mCourseAdapterExplorer = new CourseAdapterExplorer(getContext(), mCourses);
+            mCourseAdapterExplorer.setClickedListener(this);
+            rvCourses.setAdapter(mCourseAdapterExplorer);
+        } else {
+            mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("All");
+            mCourseAdapterExplorer = new CourseAdapterExplorer(getContext(), mCourses);
+            mCourseAdapterExplorer.setClickedListener(this);
+            rvCourses.setAdapter(mCourseAdapterExplorer);
+        }
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvCourses.setLayoutManager(linearLayoutManager);
+    }
+
+    @Override
+    public void onAddClicked(Course course) {
+        Toast.makeText(getContext(), "Added "+course.getCourseName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewClicked(Course course) {
+        Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
     }
 }

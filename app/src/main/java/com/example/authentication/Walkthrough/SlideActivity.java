@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.authentication.NewAccount;
+import com.example.authentication.Authentication.NewAccount;
 import com.example.authentication.R;
 
 public class SlideActivity extends AppCompatActivity {
@@ -31,7 +31,7 @@ public class SlideActivity extends AppCompatActivity {
         else
         {
             SharedPreferences.Editor editor=getSharedPreferences("slide",MODE_PRIVATE).edit();
-            editor.putBoolean("slide",false); // change to true to make walkthrough appear once only
+            editor.putBoolean("slide",true); // change to true to make walkthrough appear once only
             editor.apply();
         }
 

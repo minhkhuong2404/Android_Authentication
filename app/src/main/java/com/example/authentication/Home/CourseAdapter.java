@@ -6,13 +6,14 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.authentication.Course;
+import com.example.authentication.MyCourses.OnItemClickedListener;
 import com.example.authentication.R;
 
 import java.util.List;
@@ -23,10 +24,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
+    private OnItemClickedListener clickedListener;
+
     public CourseAdapter(Context context, List<Course> data) {
         mContext = context;
         mCourses = data;
         mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    public void setClickedListener(OnItemClickedListener clickedListener) {
+        this.clickedListener = clickedListener;
     }
 
     @NonNull
@@ -45,6 +52,23 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         holder.tvAfterSalePrice.setText(course.getAfterSalePrice());
         holder.tvRate.setText(course.getRate());
         holder.tvCourseImage.setBackgroundResource(course.getCourseImage());
+        holder.btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickedListener!= null)
+                    clickedListener.onAddClicked(course);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (clickedListener!= null){
+                    clickedListener.onViewClicked(course);
+                }
+            }
+        });
 
     }
 
@@ -58,7 +82,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         private TextView tvAfterSalePrice;
         private TextView tvBeforeSalePrice;
         private TextView tvRate;
-        private TextView tvCourseImage;
+        private ImageView tvCourseImage;
+        private Button btnAdd;
 
         @SuppressLint("ClickableViewAccessibility")
         public CourseViewHolder(@NonNull View itemView) {
@@ -68,18 +93,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             tvBeforeSalePrice = itemView.findViewById(R.id.before_sale_price);
             tvRate = itemView.findViewById(R.id.rate_homepage);
             tvCourseImage = itemView.findViewById(R.id.course_image);
+            btnAdd =itemView.findViewById(R.id.btnAdd);
 
             tvBeforeSalePrice.setPaintFlags(tvBeforeSalePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             tvBeforeSalePrice.getPaint().setStrikeThruText(true);
-
-            tvCourseImage.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Course course = mCourses.get(getAdapterPosition());
-                    Toast.makeText(mContext, course.getCourseName(), Toast.LENGTH_SHORT).show();
-                }
-            });
 
             tvCourseName.setOnClickListener(new View.OnClickListener() {
                 @Override

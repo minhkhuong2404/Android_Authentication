@@ -12,8 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.authentication.Home.CourseAdapter;
-import com.example.authentication.NotificationHandler;
+import com.example.authentication.Handler.NotificationHandler;
 import com.example.authentication.R;
 
 import java.text.ParseException;

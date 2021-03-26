@@ -1,37 +1,22 @@
-package com.example.authentication;
+package com.example.authentication.Authentication;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
-
-import java.util.concurrent.TimeUnit;
+import com.example.authentication.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,45 +37,34 @@ public class PhoneNumber extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
 
-        backToNewAccount.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                backToNewAccount();
-                finish();
-            }
+        backToNewAccount.setOnClickListener(v -> {
+            backToNewAccount();
+            finish();
         });
 
         phoneNumber.setHint("Mobile Number");
         phoneNumber.requestFocus();
 
-        addPhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(phoneNumber.getText().toString()) && phoneNumber.getText().toString().length() != 12) {
-                    // when mobile number text field is empty
-                    // displaying a toast message.
-                    Toast.makeText(PhoneNumber.this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // if the text field is not empty we are calling our
-                    // send OTP method for getting OTP from Firebase.
-                    phone = "+1" + phoneNumber.getText().toString().replace("-","");
+        addPhoneNumber.setOnClickListener(view -> {
+            if (TextUtils.isEmpty(phoneNumber.getText().toString()) && phoneNumber.getText().toString().length() != 12) {
+                // when mobile number text field is empty
+                // displaying a toast message.
+                Toast.makeText(PhoneNumber.this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
+            } else {
+                // if the text field is not empty we are calling our
+                // send OTP method for getting OTP from Firebase.
+                phone = "+1" + phoneNumber.getText().toString().replace("-","");
 
-                }
-                signup();
             }
+            signup();
         });
 
-        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
-                    addPhoneNumber.performClick();
-                }
-                return false;
-
+        phoneNumber.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
+                addPhoneNumber.performClick();
             }
+            return false;
+
         });
 
         phoneNumber.addTextChangedListener(new TextWatcher() {

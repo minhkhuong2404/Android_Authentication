@@ -1,38 +1,32 @@
 package com.example.authentication.Search;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.authentication.Course;
-import com.example.authentication.DataHandler;
+import com.example.authentication.Home.Course;
 import com.example.authentication.Explorer.CourseAdapterExplorer;
-import com.example.authentication.Explorer.Explorer;
+import com.example.authentication.Handler.CourseHandler;
 import com.example.authentication.Home.Home;
+import com.example.authentication.MyCourses.OnItemClickedListener;
 import com.example.authentication.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Search extends Fragment {
+public class Search extends Fragment implements OnItemClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,7 +37,7 @@ public class Search extends Fragment {
     private String mParam2;
 
     private RecyclerView rvCourses;
-    private SearchAdapter mSearchAdapter;
+    private CourseAdapterExplorer mSearchAdapter;
     private List<Course> mCourses;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,10 +78,10 @@ public class Search extends Fragment {
         rvCourses = view.findViewById(R.id.rv_search);
         
         mCourses = new ArrayList<Course>();
-        mCourses = new DataHandler(getContext(), null, null,1).loadDataHandler("All");
+        mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("All");
 
-        mSearchAdapter = new SearchAdapter(getContext(), mCourses);
-
+        mSearchAdapter = new CourseAdapterExplorer(getContext(), mCourses);
+        mSearchAdapter.setClickedListener(this);
         rvCourses.setAdapter(mSearchAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -120,6 +114,16 @@ public class Search extends Fragment {
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.replace(R.id.navigation_search, fragment);
 //        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onAddClicked(Course course) {
+        Toast.makeText(getContext(), "Added "+course.getCourseName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewClicked(Course course) {
+        Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
     }
     
 }

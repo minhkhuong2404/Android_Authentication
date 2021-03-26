@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.authentication.Handler;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -11,11 +11,10 @@ import android.text.format.DateUtils;
 import androidx.annotation.Nullable;
 
 import com.example.authentication.Notification.NotificationItem;
+import com.example.authentication.Provider.NotificationProvider;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.chrono.ThaiBuddhistChronology;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +33,7 @@ public class NotificationHandler extends SQLiteOpenHelper {
 
     public NotificationHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        assert context != null;
         myNotification = context.getContentResolver();
     }
 
@@ -64,11 +64,11 @@ public class NotificationHandler extends SQLiteOpenHelper {
                 String notificationItem = cursor.getString(1);
                 String notificationTime = cursor.getString(0);
 
-                String dateStr = notificationTime;
-                Date date = inputFormat.parse(dateStr);
+                Date date = inputFormat.parse(notificationTime);
+                assert date != null;
                 String niceDateStr = (String) DateUtils.getRelativeTimeSpanString(date.getTime() , Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS);
 
-                notifications.add(new NotificationItem(niceDateStr, notificationItem, notificationIcon, dateStr));
+                notifications.add(new NotificationItem(niceDateStr, notificationItem, notificationIcon, notificationTime));
             } while (cursor.moveToNext());
         }
 

@@ -1,9 +1,7 @@
-package com.example.authentication;
+package com.example.authentication.Authentication;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,17 +11,15 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.authentication.Home.Home;
-import com.example.authentication.Notification.NotificationItem;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.authentication.Home.Course;
+import com.example.authentication.Handler.CourseHandler;
+import com.example.authentication.Handler.NotificationHandler;
+import com.example.authentication.MainActivity;
+import com.example.authentication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -62,32 +58,24 @@ public class LogIn extends AppCompatActivity {
         loginPassword.setText("asdqwe123");
         loginEmail.requestFocus();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                addCourse();
-                addNotification();
-                checkLogin();
-            }
+        loginButton.setOnClickListener(v -> {
+            addCourse();
+            addNotification();
+            checkLogin();
         });
 
-        loginPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
-                    loginButton.performClick();
-                }
-                return false;
-
+        loginPassword.setOnEditorActionListener((v, actionId, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
+                loginButton.performClick();
             }
+            return false;
+
         });
 
     }
 
     public void addCourse() {
-        DataHandler dbHandler = new DataHandler(this, null, null, 1);
+        CourseHandler dbHandler = new CourseHandler(this, null, null, 1);
 //        dbHandler.deleteAllDataHandler();
         dbHandler.addDataHandler(new Course("Sketch App Masterclass","$ 340", "$ 199", "3.0", R.drawable.sketch, "Design"));
         dbHandler.addDataHandler(new Course("Figma App Materclass","$ 350", "$ 199", "5.0", R.drawable.figma, "Design"));
@@ -99,11 +87,15 @@ public class LogIn extends AppCompatActivity {
         dbHandler.addDataHandler(new Course("Business Masterclass", "$ 450", "$ 299", "5.0", R.drawable.business1, "Business"));
         dbHandler.addDataHandler(new Course("Business Introduction", "$ 350", "$ 199", "4.6", R.drawable.business2, "Business"));
         dbHandler.addDataHandler(new Course("Business Management", "$ 250", "$ 99", "3.8", R.drawable.yellow_background, "Business"));
+        dbHandler.addDataHandler(new Course("Computer Masterclass", "$ 450", "$ 299", "3.4", R.drawable.computer, "Hacking"));
+        dbHandler.addDataHandler(new Course("Bug Bounty Class", "$ 150", "$ 99", "4.9", R.drawable.bounty, "Hacking"));
+        dbHandler.addDataHandler(new Course("Hacking 101", "$ 300", "$ 199", "4.5", R.drawable.hacking, "Hacking"));
+
     }
 
     public void addNotification() {
         NotificationHandler notifHandler = new NotificationHandler(this, null,null,1);
-//        notifHandler.deleteAllDataHandler();
+        notifHandler.deleteDataHandler("456782");
     }
     
     private boolean checkLogin() {
@@ -121,14 +113,11 @@ public class LogIn extends AppCompatActivity {
         progressDialog.show();
 
         new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismiss();
-                        result[0] = true;
-                        onLogInSuccess();
-                    }
-                }, 1000);
+                () -> {
+                    progressDialog.dismiss();
+                    result[0] = true;
+                    onLogInSuccess();
+                }, 0);
         return result[0];
     }
 
@@ -147,20 +136,17 @@ public class LogIn extends AppCompatActivity {
         Log.d("valid", "login_successs");
         loginButton.setEnabled(true);
         mAuth.signInWithEmailAndPassword(loginEmail.getText().toString(), loginPassword.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Login", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LogIn.this, "Log in successfully.", Toast.LENGTH_SHORT).show();
-                            switchToHome();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("Login", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LogIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Login", "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+//                        Toast.makeText(LogIn.this, "Log in successfully.", Toast.LENGTH_SHORT).show();
+                        switchToHome();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Login", "signInWithEmail:failure", task.getException());
+//                        Toast.makeText(LogIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
         setResult(RESULT_OK, null);

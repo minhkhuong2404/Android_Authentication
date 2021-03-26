@@ -5,19 +5,19 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.authentication.Course;
-import com.example.authentication.Explorer.CourseAdapterExplorer;
-import com.example.authentication.Notification.NotificationItem;
+import com.example.authentication.Home.Course;
 import com.example.authentication.R;
 
 import java.util.List;
 
+// same functionality as CourseAdapterExplorer
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
     private static final String TAG = "CourseAdapter";
     private List<Course> mCourses;
@@ -57,7 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         private TextView tvAfterSalePrice;
         private TextView tvBeforeSalePrice;
         private TextView tvRate;
-        private TextView tvCourseImage;
+        private ImageView tvCourseImage;
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);

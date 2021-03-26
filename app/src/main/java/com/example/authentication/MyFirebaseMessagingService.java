@@ -4,36 +4,27 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.text.format.DateUtils;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.authentication.Handler.NotificationHandler;
 import com.example.authentication.Notification.NotificationItem;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -91,7 +82,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("notify", remoteMessage.getNotification().getBody());
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
             try {
-                sendNotification(remoteMessage.getNotification().getBody());
+                if (remoteMessage.getNotification().getBody().length() != 6 && !isNumeric(remoteMessage.getNotification().getBody())) {
+                    sendNotification(remoteMessage.getNotification().getBody());
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -151,6 +144,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 
     /**

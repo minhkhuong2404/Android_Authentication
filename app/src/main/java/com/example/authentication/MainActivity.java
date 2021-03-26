@@ -7,18 +7,13 @@ import android.view.MenuItem;
 import com.example.authentication.Explorer.Explorer;
 import com.example.authentication.Home.Home;
 import com.example.authentication.Notification.Notification;
-import com.example.authentication.Profile.Profile;
-import com.example.authentication.Search.Search;
+import com.example.authentication.Setting.Setting;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                             openFragment(Notification.newInstance("", ""));
                             return true;
                         case R.id.navigation_profile:
-                            openFragment(Profile.newInstance("", ""));
+                            openFragment(Setting.newInstance("", ""));
                             return true;
                     }
                     return false;

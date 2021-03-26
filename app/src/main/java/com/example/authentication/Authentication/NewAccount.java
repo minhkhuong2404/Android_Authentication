@@ -1,13 +1,9 @@
-package com.example.authentication;
+package com.example.authentication.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -18,11 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.authentication.Authentication.CreatePassword;
+import com.example.authentication.Authentication.LogIn;
+import com.example.authentication.R;
 import com.example.authentication.Walkthrough.SlideActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class NewAccount extends AppCompatActivity {

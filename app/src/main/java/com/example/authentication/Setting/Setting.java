@@ -1,8 +1,7 @@
-package com.example.authentication.Profile;
+package com.example.authentication.Setting;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,17 +16,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.authentication.LogIn;
+import com.example.authentication.Authentication.LogIn;
 import com.example.authentication.MyCourses.MyCourses;
 import com.example.authentication.R;
-import com.example.authentication.Search.Search;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Profile#newInstance} factory method to
+ * Use the {@link Setting#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Profile extends Fragment {
+public class Setting extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,8 +38,10 @@ public class Profile extends Fragment {
     private Button signOutButton;
     private TextView historyActivity;
     private TextView notificationActivity;
+    private TextView profileActivity;
+    private TextView helpActivity;
 
-    public Profile() {
+    public Setting() {
         // Required empty public constructor
     }
 
@@ -54,8 +54,8 @@ public class Profile extends Fragment {
      * @return A new instance of fragment Profile.
      */
     // TODO: Rename and change types and number of parameters
-    public static Profile newInstance(String param1, String param2) {
-        Profile fragment = new Profile();
+    public static Setting newInstance(String param1, String param2) {
+        Setting fragment = new Setting();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -82,31 +82,35 @@ public class Profile extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         signOutButton = view.findViewById(R.id.sign_out_btn);
-
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToLogIn();
-            }
-        });
+        signOutButton.setOnClickListener(v -> switchToLogIn());
 
         historyActivity = view.findViewById(R.id.setting_activity_history);
-        historyActivity.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                switchToMyCourse();
-            }
-        });
+        historyActivity.setOnClickListener(v -> switchToMyCourse());
 
         notificationActivity = view.findViewById(R.id.setting_notifications);
-        notificationActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToNotification();
-            }
-        });
+        notificationActivity.setOnClickListener(v -> switchToNotification());
 
+        profileActivity = view.findViewById(R.id.setting_my_account);
+        profileActivity.setOnClickListener(v -> switchToProfile());
+
+        helpActivity = view.findViewById(R.id.setting_help);
+        helpActivity.setOnClickListener(v -> switchToHelp());
+
+    }
+
+    private void switchToHelp() {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse("https://www.google.com"));
+        getActivity().startActivity(i);
+    }
+
+    private void switchToProfile() {
+        Fragment fragment = new Profile();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.myContainer, fragment, "profile");
+        fragmentTransaction.addToBackStack("profile");
+        fragmentTransaction.commit();
     }
 
     private void switchToLogIn() {
@@ -124,10 +128,11 @@ public class Profile extends Fragment {
     }
 
     private void switchToNotification() {
-        Fragment fragment = new com.example.authentication.Notification.Notification();
+        Fragment fragment = new com.example.authentication.Setting.Notification();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.myContainer, fragment, "notification");
+        fragmentTransaction.addToBackStack("notification");
         fragmentTransaction.commit();
     }
 

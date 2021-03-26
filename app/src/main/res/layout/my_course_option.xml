@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/my_courses_collection"
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:fontFamily="@font/pt_sans_regular"
     android:paddingVertical="10dp"
     android:paddingHorizontal="10dp"
-    android:background="@drawable/underline">
+    android:background="@drawable/underline"
+    android:gravity="center">
 </TextView>

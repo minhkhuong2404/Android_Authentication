@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.authentication.Provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -7,15 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.authentication.Notification.Notification;
+import com.example.authentication.Handler.NotificationHandler;
 
 public class NotificationProvider extends ContentProvider {
-    private static final String AUTHORITY = "com.example.authentication.NotificationProvider";
+    private static final String AUTHORITY = "com.example.authentication.Provider.NotificationProvider";
     private static final String NOTIFICATION_TABLE = "Notifications";
     public static final int NOTIFICATION = 1;
 

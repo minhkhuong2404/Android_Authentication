@@ -1,4 +1,4 @@
-package com.example.authentication;
+package com.example.authentication.Handler;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -9,10 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.authentication.Home.Course;
+import com.example.authentication.Provider.CourseProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataHandler extends SQLiteOpenHelper {
+public class CourseHandler extends SQLiteOpenHelper {
     private ContentResolver myCR;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "course.db";
@@ -24,7 +27,7 @@ public class DataHandler extends SQLiteOpenHelper {
     public static final String Category = "Category";
     public static final String Course_image = "CourseImage";
 
-    public DataHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public CourseHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
         myCR = context.getContentResolver();
     }
