@@ -1,7 +1,10 @@
 package com.example.authentication.Explorer;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -16,13 +19,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.authentication.CourseView;
+import com.example.authentication.FixedSpeedScroller;
 import com.example.authentication.Home.Course;
 import com.example.authentication.Handler.CourseHandler;
 import com.example.authentication.Home.ImageSliderAdapter;
@@ -30,8 +43,11 @@ import com.example.authentication.MyCourses.OnItemClickedListener;
 import com.example.authentication.R;
 import com.example.authentication.Search.Search;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,12 +68,20 @@ public class Explorer extends Fragment implements OnItemClickedListener {
     private RecyclerView rvCourses;
     private CourseAdapterExplorer mCourseAdapterExplorer;
     private List<Course> mCourses;
+    private SharedPreferences sharedPreferences ;
 
     static final int COLOR_INACTIVE = Color.WHITE;
     static final int COLOR_ACTIVE = Color.rgb(236,91,76);
     private TextView slidePagerText;
     private TextView slidePagerCategory;
     private TextView slidePagerView;
+    private int currentPage;
+    private Timer timer;
+    private final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
+    private final long PERIOD_MS = 5000; // time in milliseconds between successive task executions.
+    private String firstLogIn;
+    private static final float MIN_SCALE = 0.75f;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     public Explorer() {
         // Required empty public constructor
@@ -84,6 +108,7 @@ public class Explorer extends Fragment implements OnItemClickedListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -94,15 +119,20 @@ public class Explorer extends Fragment implements OnItemClickedListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_explorer, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         rvCourses = view.findViewById(R.id.rv_course_explorer);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        firstLogIn = mParam2;
 
         mCourses = new ArrayList<>();
-        mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("All");
+        mCourses = new CourseHandler(getContext(), null, null,1).loadCourseHandler("All");
 
         mCourseAdapterExplorer = new CourseAdapterExplorer(getContext(), mCourses);
         mCourseAdapterExplorer.setClickedListener(this);
@@ -127,12 +157,76 @@ public class Explorer extends Fragment implements OnItemClickedListener {
         int[] urls = {
                 (R.drawable.orange_background),
                 (R.drawable.yellow_background),
-                (R.drawable.blue_background)
+                (R.drawable.blue_background),
+                (R.drawable.green_background),
+                (R.drawable.violet_background)
+        };
+        String[] title = {
+                "Design MasterClass 1",
+                "Business MasterClass 2",
+                "Hacking 101",
+                "Security Systems",
+                "UI/UX 101"
+        };
+
+        String[] category = {
+                "Design",
+                "Business",
+                "Hacking",
+                "Hacking",
+                "Design"
+        };
+
+        Integer[] colors_temp = {
+                getResources().getColor(R.color.orange),
+                getResources().getColor(R.color.yellow),
+                getResources().getColor(R.color.blue),
+                getResources().getColor(R.color.green),
+                getResources().getColor(R.color.violet)
         };
 
         ViewPager imageSlider = view.findViewById(R.id.imageSlider_explorer);
-        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(urls);
+        ExplorerImageSlideAdapter imageSliderAdapter = new ExplorerImageSlideAdapter(getContext(), urls, title, category);
         imageSlider.setAdapter(imageSliderAdapter);
+//        imageSlider.setBackgroundResource(
+//                R.drawable.background_slide_pager_explorer
+//        );
+        Interpolator sInterpolator = new AccelerateInterpolator();
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(imageSlider.getContext(), sInterpolator);
+            if (currentPage == urls.length) {
+                scroller.setmDuration(50);
+            } else {
+                scroller.setmDuration(1000);
+            }
+            mScroller.set(imageSlider, scroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+
+        }
+        /*After setting the adapter use the timer */
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage == urls.length) {
+                    currentPage = 0;
+                }
+                imageSlider.setCurrentItem(currentPage, true);
+                currentPage += 1;
+            }
+        };
+
+        timer = new Timer(); // This will create a new Thread
+        timer.schedule(new TimerTask() { // task to be scheduled
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, DELAY_MS, PERIOD_MS);
 
         // Indicator:
         LinearLayout indicator = view.findViewById(R.id.indicator_explorer);
@@ -155,34 +249,69 @@ public class Explorer extends Fragment implements OnItemClickedListener {
                     // thì sẽ đổi thành màu COLOR_INACTIVE
                     indicator.getChildAt(i).getBackground().mutate().setTint(i == position ? COLOR_ACTIVE : COLOR_INACTIVE);
                 }
+
+//                GradientDrawable draw = (GradientDrawable) imageSlider.getBackground();
+//                if (position < (imageSliderAdapter.getCount() -1) && position < (colors_temp.length - 1)) {
+//
+//                    draw.setColor(
+//                            (Integer) argbEvaluator.evaluate(
+//                                    positionOffset,
+//                                    colors_temp[position],
+//                                    colors_temp[position + 1]
+//                            ));
+//                }
+//
+//                else {
+//                    draw.setColor(
+//                            colors_temp[colors_temp.length - 1]);
+//                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                String title = "";
-                String category = "";
-                switch (position) {
-                    case 0:
-                        title = "Business MasterClass 1";
-                        category = "Business";
-                        break;
-                    case 1:
-                        title = "Design 101";
-                        category = "Design";
-                        break;
-                    case 2:
-                        title = "Security Hack";
-                        category = "Hacking";
-                        break;
-
-                }
-                slidePagerText.setText(title);
-                slidePagerCategory.setText(category);
+                editor.putInt("Page", currentPage - 1);
+                editor.apply();
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        imageSlider.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View view, float position) {
+                int pageWidth = view.getWidth();
+
+                if (position < -1) { // [-Infinity,-1)
+                    // This page is way off-screen to the left.
+                    view.setAlpha(0f);
+
+                } else if (position <= 0) { // [-1,0]
+                    // Use the default slide transition when moving to the left page
+                    view.setAlpha(1f);
+                    view.setTranslationX(0f);
+                    view.setScaleX(1f);
+                    view.setScaleY(1f);
+
+                } else if (position <= 1) { // (0,1]
+                    // Fade the page out.
+                    view.setAlpha(1 - position);
+
+                    // Counteract the default slide transition
+                    view.setTranslationX(pageWidth * -position);
+
+                    // Scale the page down (between MIN_SCALE and 1)
+                    float scaleFactor = MIN_SCALE
+                            + (1 - MIN_SCALE) * (1 - Math.abs(position));
+                    view.setScaleX(scaleFactor);
+                    view.setScaleY(scaleFactor);
+
+                } else { // (1,+Infinity]
+                    // This page is way off-screen to the right.
+                    view.setAlpha(0f);
+                }
             }
         });
     }
@@ -200,20 +329,71 @@ public class Explorer extends Fragment implements OnItemClickedListener {
 
     private void switchToSearch() {
         Fragment fragment = new Search();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
         fragmentTransaction.add(R.id.myContainer, fragment, "Tag");
         fragmentTransaction.addToBackStack("Tag");
         fragmentTransaction.commit();
     }
 
     @Override
-    public void onAddClicked(Course course) {
-        Toast.makeText(getContext(), "Added "+course.getCourseName(), Toast.LENGTH_SHORT).show();
+    public void onAddClicked(TextView textView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        textView.clearAnimation();
+        textView.startAnimation(a);
+    }
+
+    private void switchToCourseView(Course course) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
+        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.addToBackStack("view");
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onViewClicked(Course course) {
-        Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
+        switchToCourseView(course);
     }
+
+    @Override
+    public void onCourseClicked(ImageView imageView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        imageView.clearAnimation();
+        imageView.startAnimation(a);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (firstLogIn.equals("0")) {
+            currentPage = 0;
+            firstLogIn = "1";
+        } else {
+            currentPage = sharedPreferences.getInt("Page", 0);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("Page", currentPage - 1);
+        editor.apply();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("Page", currentPage);
+        editor.apply();
+
+    }
+
 }

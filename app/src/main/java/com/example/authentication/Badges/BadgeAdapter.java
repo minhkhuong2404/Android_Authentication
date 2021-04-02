@@ -5,16 +5,22 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.authentication.MyCourses.OnItemClickedListener;
 import com.example.authentication.R;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>{
 
@@ -22,11 +28,17 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
     private List<Badge> mBadges;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    private OnBadgeClickListener clickedListener;
+    private int lastPosition = -1;
 
     public BadgeAdapter(Context context, List<Badge> data) {
         mContext = context;
         mBadges = data;
         mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    public void setClickedListener(OnBadgeClickListener clickedListener) {
+        this.clickedListener = clickedListener;
     }
 
     @NonNull
@@ -42,11 +54,47 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
 
         holder.tvBadgeName.setText(badge.getBadgeName());
         holder.tvBadgeRequirement.setText(badge.getBadgeRequirement());
-        holder.tvBadgeIcon.setBackgroundResource(badge.getBadgeIcon());
+        Glide.with(mContext).load(badge.getBadgeIcon()).into(holder.tvBadgeIcon);
 
+        holder.itemView.setOnClickListener(v -> {
+
+            if (clickedListener!= null){
+                clickedListener.onViewClicked(badge);
+            }
+
+        });
+
+        holder.tvBadgeIcon.setOnClickListener(v -> {
+
+            if (clickedListener!= null){
+                clickedListener.onBadgeClicked(holder.tvBadgeIcon);
+            }
+        });
+
+        holder.tvBadgeName.setOnClickListener(v -> {
+
+            if (clickedListener!= null){
+                clickedListener.onViewClicked(badge);
+            }
+            v.setOnClickListener(null);
+        });
+        setAnimation(holder.itemView, position);
 
     }
 
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_in);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
     @Override
     public int getItemCount() {
         return mBadges.size();
@@ -65,11 +113,6 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
             tvBadgeRequirement = itemView.findViewById(R.id.badge_requirement);
             tvBadgeIcon = itemView.findViewById(R.id.badge_icon);
 
-
-            tvBadgeName.setOnClickListener(v -> {
-                Badge badge = mBadges.get(getAdapterPosition());
-                Toast.makeText(mContext, badge.getBadgeName(), Toast.LENGTH_SHORT).show();
-            });
         }
     }
 }

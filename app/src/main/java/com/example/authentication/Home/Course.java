@@ -10,10 +10,10 @@ public class Course {
     private String beforeSalePrice;
     private String afterSalePrice;
     private String rate;
-    private int courseImage;
+    private String courseImage;
     private String category;
 
-    public Course(String courseName, String beforeSalePrice, String afterSalePrice, String rate, int courseImage, String category) {
+    public Course(String courseName, String beforeSalePrice, String afterSalePrice, String rate, String courseImage, String category) {
         this.courseName = courseName;
         this.beforeSalePrice = beforeSalePrice;
         this.afterSalePrice = afterSalePrice;
@@ -54,11 +54,11 @@ public class Course {
         this.rate = rate;
     }
 
-    public int getCourseImage() {
+    public String getCourseImage() {
         return courseImage;
     }
 
-    public void setCourseImage(int courseImage) {
+    public void setCourseImage(String courseImage) {
         this.courseImage = courseImage;
     }
 

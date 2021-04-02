@@ -5,12 +5,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.authentication.R;
 
 import java.util.List;
@@ -20,6 +24,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<NotificationItem> mNotifications;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    private int lastPosition = -1;
 
     public NotificationAdapter(Context context, List<NotificationItem> data) {
         mContext = context;
@@ -37,10 +42,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         NotificationItem course = mNotifications.get(position);
 
-        holder.tvNotificationIcon.setBackgroundResource(course.getNotificationIcon());
+        Glide.with(mContext).load(course.getNotificationIcon()).into(holder.tvNotificationIcon);
         holder.tvNotificationInfo.setText(course.getNotificationInformation());
         holder.tvNotificationTime.setText(course.getNotificationTime());
+        setAnimation(holder.itemView, position);
 
+    }
+
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_in);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
@@ -52,7 +72,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         private TextView tvNotificationInfo;
         private TextView tvNotificationTime;
-        private TextView tvNotificationIcon;
+        private ImageView tvNotificationIcon;
 
         @SuppressLint("ClickableViewAccessibility")
         public NotificationViewHolder(@NonNull View itemView) {

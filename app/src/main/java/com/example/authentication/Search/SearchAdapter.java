@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.authentication.Home.Course;
 import com.example.authentication.R;
 
@@ -44,7 +45,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.tvBeforeSalePrice.setText(course.getBeforeSalePrice());
         holder.tvAfterSalePrice.setText(course.getAfterSalePrice());
         holder.tvRate.setText(course.getRate());
-        holder.tvCourseImage.setBackgroundResource(course.getCourseImage());
+        Glide.with(mContext).load(course.getCourseImage()).into(holder.tvCourseImage);
     }
 
     @Override

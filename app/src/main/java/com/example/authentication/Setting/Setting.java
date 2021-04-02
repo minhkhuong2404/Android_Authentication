@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,8 @@ public class Setting extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Log.d("Category Splash", mParam1 + " --- " + mParam2);
+
     }
 
     @Override
@@ -101,13 +104,14 @@ public class Setting extends Fragment {
     private void switchToHelp() {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse("https://www.google.com"));
-        getActivity().startActivity(i);
+        requireActivity().startActivity(i);
     }
 
     private void switchToProfile() {
-        Fragment fragment = new Profile();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment = Profile.newInstance(mParam1, mParam2);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
         fragmentTransaction.add(R.id.myContainer, fragment, "profile");
         fragmentTransaction.addToBackStack("profile");
         fragmentTransaction.commit();
@@ -116,12 +120,14 @@ public class Setting extends Fragment {
     private void switchToLogIn() {
         Intent switchToLogIn = new Intent(getActivity(), LogIn.class);
         startActivity(switchToLogIn);
+        getActivity().finish();
     }
 
     private void switchToMyCourse() {
-        Fragment fragment = new MyCourses();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment = MyCourses.newInstance(mParam1, mParam2);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
         fragmentTransaction.add(R.id.myContainer, fragment, "my_course");
         fragmentTransaction.addToBackStack("my_course");
         fragmentTransaction.commit();
@@ -129,8 +135,9 @@ public class Setting extends Fragment {
 
     private void switchToNotification() {
         Fragment fragment = new com.example.authentication.Setting.Notification();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
         fragmentTransaction.add(R.id.myContainer, fragment, "notification");
         fragmentTransaction.addToBackStack("notification");
         fragmentTransaction.commit();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -17,15 +18,19 @@ import com.example.authentication.R;
 
 public class ImageSliderAdapter extends PagerAdapter {
 
-    private int[] urls;
+    private int[] background;
+    private String[] title;
+    private LayoutInflater inflater;
 
-    public ImageSliderAdapter(int[] urls) {
-        this.urls = urls;
+    public ImageSliderAdapter(Context context, int[] background, String[] title) {
+        this.title = title;
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.background = background;
     }
 
     @Override
     public int getCount() {
-        return urls.length;
+        return title.length;
     }
 
     @Override
@@ -37,13 +42,28 @@ public class ImageSliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         // Tạo ImageView, container chính là ViewPager của chúng ta
-        final Context context = container.getContext();
-        final AppCompatImageView imageView = new AppCompatImageView(context);
-        container.addView(imageView);
-        // Load ảnh vào ImageView bằng Glide
-        Glide.with(context).load(urls[position]).apply(new RequestOptions().override(800,300)).into(imageView);
-        // Return
-        return imageView;
+//        final Context context = container.getContext();
+//        final AppCompatImageView imageView = new AppCompatImageView(context);
+//        container.addView(imageView);
+//        // Load ảnh vào ImageView bằng Glide
+//        Glide.with(context).load(title[position]).apply(new RequestOptions().override(800,300)).into(imageView);
+//        // Return
+//        return imageView;
+
+        View itemView;
+        itemView = inflater.inflate(R.layout.slide_pager, container, false);
+
+        LinearLayout layout = itemView.findViewById(R.id.background_slide_pager_home);
+        TextView titleText = (TextView) itemView.findViewById(R.id.home_slide_pager_text);
+
+        layout.setBackgroundResource(background[position]);
+
+        titleText.setText(title[position]);
+
+
+        ((ViewPager) container).addView(itemView);
+
+        return itemView;
     }
 
     @Override

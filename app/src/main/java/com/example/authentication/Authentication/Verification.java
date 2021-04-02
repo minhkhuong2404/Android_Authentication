@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,17 +44,6 @@ import butterknife.Unbinder;
 
 public class Verification extends AppCompatActivity {
 
-    Unbinder unbinder;
-    @BindView(R.id.back_btn_verification) Button backToPhoneNumber;
-    @BindView(R.id.resend_verification) TextView resendCodeText;
-    @BindView(R.id.verification_continue_btn) Button sendCodeButton;
-    @BindView(R.id.code_1) EditText code1;
-    @BindView(R.id.code_2) EditText code2;
-    @BindView(R.id.code_3) EditText code3;
-    @BindView(R.id.code_4) EditText code4;
-    @BindView(R.id.code_5) EditText code5;
-    @BindView(R.id.code_6) EditText code6;
-
     private FirebaseAuth mAuth;
     private String verificationId;
     public String otpFull = "";
@@ -64,6 +54,12 @@ public class Verification extends AppCompatActivity {
     private int numberOfOtpSent = 0;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
+    EditText code1 ;
+    EditText code2 ;
+    EditText code3 ;
+    EditText code4 ;
+    EditText code5 ;
+    EditText code6 ;
 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -100,10 +96,16 @@ public class Verification extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        getSupportActionBar().hide(); // hide the title bar
         setContentView(R.layout.verification);
-        unbinder = ButterKnife.bind(this);
+//        unbinder = ButterKnife.bind(this);
         loadingBar = new ProgressDialog(this);
         System.out.println("Your otp is created : " + otpFull);
+
+        Button backToPhoneNumber = findViewById(R.id.back_btn_verification);
+        TextView resendCodeText = findViewById(R.id.resend_verification);
+        Button sendCodeButton = findViewById(R.id.verification_continue_btn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -114,12 +116,12 @@ public class Verification extends AppCompatActivity {
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
                 mMessageReceiver, new IntentFilter("Notification"));
 
-//        EditText code1 = findViewById(R.id.code_1);
-//        EditText code2 = findViewById(R.id.code_2);
-//        EditText code3 = findViewById(R.id.code_3);
-//        EditText code4 = findViewById(R.id.code_4);
-//        EditText code5 = findViewById(R.id.code_5);
-//        EditText code6 = findViewById(R.id.code_6);
+        code1 = findViewById(R.id.code_1);
+        code2 = findViewById(R.id.code_2);
+        code3 = findViewById(R.id.code_3);
+        code4 = findViewById(R.id.code_4);
+        code5 = findViewById(R.id.code_5);
+        code6 = findViewById(R.id.code_6);
 
         resendCodeText.setOnClickListener(v -> {
             LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
@@ -254,6 +256,12 @@ public class Verification extends AppCompatActivity {
 
     public class GenericText implements TextWatcher {
         private View view;
+        EditText code1 = findViewById(R.id.code_1);
+        EditText code2 = findViewById(R.id.code_2);
+        EditText code3 = findViewById(R.id.code_3);
+        EditText code4 = findViewById(R.id.code_4);
+        EditText code5 = findViewById(R.id.code_5);
+        EditText code6 = findViewById(R.id.code_6);
 
         private GenericText(View view) {
             this.view = view;

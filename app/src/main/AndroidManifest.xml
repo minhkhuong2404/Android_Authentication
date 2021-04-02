@@ -7,8 +7,11 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTION_OPEN_DOCUMENT" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
 
@@ -17,7 +20,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Authentication">
+        android:theme="@style/Theme.Authentication"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <activity android:name=".Walkthrough.SlideActivity">
             <intent-filter>
@@ -54,6 +59,9 @@
 
         </activity>
 
+        <activity android:name=".Splash">
+
+        </activity>
         <provider
             android:name="com.example.authentication.Provider.CourseProvider"
             android:authorities="com.example.authentication.Provider.CourseProvider"
@@ -69,13 +77,16 @@
         </provider>
 
         <service
-            android:name="com.example.authentication.MyFirebaseMessagingService"
+            android:name="com.example.authentication.Service.MyFirebaseMessagingService"
             android:exported="false"
             tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name="com.example.authentication.Service.MusicService" android:enabled="true"
+            android:exported="true"/>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_baseline_notifications_24" />

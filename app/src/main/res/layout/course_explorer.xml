@@ -35,7 +35,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text"
-                android:fontFamily="@font/pt_sans_bold"/>
+                android:fontFamily="@font/pt_sans_bold"
+                android:text="Sketch"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
             <TextView
                 android:id="@+id/rate_explorer"
                 android:layout_width="45dp"
@@ -47,6 +52,7 @@
                 android:gravity="center"
                 android:drawableLeft="@drawable/ic_baseline_star_12"
                 android:textSize="11dp"
+                android:text="3.5"
                 android:fontFamily="@font/pt_sans_regular"
                 android:textColor="@color/white"
                 android:background="@drawable/text_field"
@@ -66,12 +72,15 @@
                     android:textColor="@color/orange_400"
                     android:fontFamily="@font/pt_sans_bold"
                     android:textSize="18sp"
-                    android:padding="10dp"/>
+                    android:paddingVertical="10dp"
+                    android:paddingRight="10dp"
+                    android:text="$ 240"/>
                 <TextView
                     android:id="@+id/before_sale_price_explorer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="8sp"
+                    android:text="$ 150"
                     android:layout_gravity="center"
                     android:fontFamily="@font/pt_sans_bold"/>
                 <View

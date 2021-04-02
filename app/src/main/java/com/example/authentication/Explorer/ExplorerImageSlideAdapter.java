@@ -56,11 +56,15 @@ public class ExplorerImageSlideAdapter extends PagerAdapter {
         LinearLayout layout = itemView.findViewById(R.id.background_slide_pager);
         TextView titleText = (TextView) itemView.findViewById(R.id.explorer_slide_pager_text);
         TextView categoryText = (TextView) itemView.findViewById(R.id.category_slide_pager_text);
+        TextView viewText = (TextView) itemView.findViewById(R.id.view_slide_pager_text);
 
         layout.setBackgroundResource(background[position]);
 
         titleText.setText(title[position]);
         categoryText.setText(category[position]);
+
+        viewText.setText("VIEW");
+        viewText.setBackgroundResource(R.drawable.text_field);
 
         ((ViewPager) container).addView(itemView);
 

@@ -83,7 +83,7 @@ public class Notification extends Fragment {
 
         mNotifications = new ArrayList<>();
         try {
-            mNotifications = new NotificationHandler(getContext(), null, null, 1).loadDataHandler();
+            mNotifications = new NotificationHandler(getContext(), null, null, 1).loadNotificationHandler();
         } catch (ParseException e) {
             e.printStackTrace();
         }

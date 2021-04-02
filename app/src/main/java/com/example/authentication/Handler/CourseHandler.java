@@ -34,8 +34,8 @@ public class CourseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_COURSE_TABLE = "CREATE TABLE IF NOT EXISTS " + Table_course + "(" + Course_name + " TEXT PRIMARY KEY,"
-                + Before_sale_price + " TEXT," + After_sale_price + " TEXT," + Rate + " TEXT," + Course_image + " INT," + Category + " TEXT)";
+        String CREATE_COURSE_TABLE = "CREATE TABLE " + Table_course + "(" + Course_name + " TEXT PRIMARY KEY,"
+                + Before_sale_price + " TEXT," + After_sale_price + " TEXT," + Rate + " TEXT," + Course_image + " TEXT," + Category + " TEXT)";
         db.execSQL(CREATE_COURSE_TABLE);
     }
 
@@ -45,10 +45,10 @@ public class CourseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public List<Course> loadDataHandler(String course) {
+    public List<Course> loadCourseHandler(String course) {
         List<Course> courses = new ArrayList<>();
         String[] projection = {Course_name, Before_sale_price, After_sale_price, Rate, Course_image, Category};
-        String selection = "Category = \"" + course + "\"";
+        String selection = "Category = '" + course + "'";
 
 //        String query = "";
 //        if (!course.equals("All")) {
@@ -72,7 +72,7 @@ public class CourseHandler extends SQLiteOpenHelper {
                 String beforeSalePrice = cursor.getString(1);
                 String afterSalePrice = cursor.getString(2);
                 String rate = cursor.getString(3);
-                int courseImage = cursor.getInt(4);
+                String courseImage = cursor.getString(4);
                 String category = cursor.getString(5);
                 courses.add(new Course(courseName, beforeSalePrice, afterSalePrice, rate, courseImage, category));
             } while (cursor.moveToNext());
@@ -83,7 +83,7 @@ public class CourseHandler extends SQLiteOpenHelper {
         return courses;
     }
 
-    public void addDataHandler(Course course) {
+    public void addCourseHandler(Course course) {
         ContentValues values = new ContentValues();
         values.put(Course_name, course.getCourseName());
         values.put(Before_sale_price, course.getBeforeSalePrice());
@@ -94,7 +94,7 @@ public class CourseHandler extends SQLiteOpenHelper {
         myCR.insert(CourseProvider.CONTENT_URI, values);
     }
 
-    public boolean deleteDataHandler(String course_name) {
+    public boolean deleteCourseHandler(String course_name) {
         boolean result = false;
         String selection = "Course_name = \"" + course_name +"\"";
         int rowsDeleted =
@@ -104,7 +104,7 @@ public class CourseHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean deleteAllDataHandler() {
+    public boolean deleteAllCourseHandler() {
         boolean result = false;
         int rowsDeleted =
                 myCR.delete(CourseProvider.CONTENT_URI,null, null);
@@ -113,7 +113,7 @@ public class CourseHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean updateDataHandler(String course_name, String before_sale_price, String after_sale_price, String rate, int course_image, String category) {
+    public boolean updateCourseHandler(String course_name, String before_sale_price, String after_sale_price, String rate, int course_image, String category) {
 
         ContentValues values = new ContentValues();
         values.put(Course_name, course_name);

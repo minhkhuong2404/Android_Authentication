@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:id="@+id/notification_icon"
             android:layout_width="60dp"
             android:layout_height="match_parent"

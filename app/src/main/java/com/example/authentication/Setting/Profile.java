@@ -10,10 +10,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,12 +27,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.authentication.BadgeView;
 import com.example.authentication.Badges.Badge;
 import com.example.authentication.Badges.BadgeAdapter;
+import com.example.authentication.Badges.OnBadgeClickListener;
+import com.example.authentication.CourseView;
 import com.example.authentication.Home.Course;
 import com.example.authentication.Explorer.CourseAdapterExplorer;
 import com.example.authentication.Handler.CourseHandler;
@@ -40,8 +47,9 @@ import com.example.authentication.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Profile extends Fragment implements OnCollectionClickedListener, OnItemClickedListener {
+public class Profile extends Fragment implements OnCollectionClickedListener, OnItemClickedListener, OnBadgeClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,6 +77,10 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
     private Intent intent;
     private String ImageUri;
 
+
+    private boolean generateOnce1 = false;
+    private boolean generateOnce2 = false;
+
     public Profile() {
         // Required empty public constructor
     }
@@ -83,8 +95,8 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
      * @return A new instance of fragment Search.
      */
     // TODO: Rename and change types and number of parameters
-    public static Explorer newInstance(String param1, String param2) {
-        Explorer fragment = new Explorer();
+    public static Profile newInstance(String param1, String param2) {
+        Profile fragment = new Profile();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -123,7 +135,7 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
         tvUsername = view.findViewById(R.id.username_settings);
         tvUsername.setText(removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
 
-        imageview = getView().findViewById(R.id.avatar_settings);
+        imageview = requireView().findViewById(R.id.avatar_settings);
         if (checkPermissionWRITE_EXTERNAL_STORAGE(getContext())) {
             Glide.with(getView()).load(Uri.parse(ImageUri)).into(imageview);
         }
@@ -150,6 +162,7 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
 
         myBadgeAdapter = new BadgeAdapter(getContext(), badges);
         rvBadges.setAdapter(myBadgeAdapter);
+        myBadgeAdapter.setClickedListener(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvBadges.setLayoutManager(linearLayoutManager);
@@ -160,7 +173,7 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
     }
 
     private void backToSettings() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
     }
 
@@ -228,15 +241,17 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
         courses = new ArrayList<>();
 
         if (position == 1) {
-            courses = new CourseHandler(getContext(), null, null, 1).loadDataHandler("Hacking");
+            courses = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam1);
 
+            generateOnce1 = true;
             myCoursesAdapter = new CourseAdapterExplorer(getContext(), courses);
             myCoursesAdapter.setClickedListener(this);
             rvBadges.setAdapter(myCoursesAdapter);
 
         } else if (position == 2) {
-            courses = new CourseHandler(getContext(), null, null, 1).loadDataHandler("Design");
 
+            courses = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam2);
+            generateOnce2 = true;
             myCoursesAdapter = new CourseAdapterExplorer(getContext(), courses);
             myCoursesAdapter.setClickedListener(this);
             rvBadges.setAdapter(myCoursesAdapter);
@@ -244,6 +259,7 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
         else {
             myBadgeAdapter = new BadgeAdapter(getContext(), badges);
             rvBadges.setAdapter(myBadgeAdapter);
+            myBadgeAdapter.setClickedListener(this);
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -253,12 +269,54 @@ public class Profile extends Fragment implements OnCollectionClickedListener, On
     }
 
     @Override
-    public void onAddClicked(Course course) {
-        Toast.makeText(getContext(), "Added "+course.getCourseName(), Toast.LENGTH_SHORT).show();
+    public void onAddClicked(TextView textView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        textView.clearAnimation();
+        textView.startAnimation(a);
+    }
+
+    private void switchToCourseView(Course course) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
+        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.addToBackStack("view");
+        fragmentTransaction.commit();
+    }
+
+    private void switchToBadgeView(Badge badge) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
+        fragmentTransaction.add(R.id.myContainer, BadgeView.newInstance(badge.getBadgeIcon(), badge.getBadgeName()), "view");
+        fragmentTransaction.addToBackStack("badge");
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onViewClicked(Course course) {
-        Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
+        switchToCourseView(course);
+    }
+
+    @Override
+    public void onCourseClicked(ImageView imageView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        imageView.clearAnimation();
+        imageView.startAnimation(a);
+    }
+
+    @Override
+    public void onViewClicked(Badge badge) {
+        switchToBadgeView(badge);
+    }
+
+    @Override
+    public void onBadgeClicked(ImageView imageView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        imageView.clearAnimation();
+        imageView.startAnimation(a);
     }
 }

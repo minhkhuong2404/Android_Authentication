@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,9 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.authentication.CourseView;
 import com.example.authentication.Home.Course;
 import com.example.authentication.Explorer.CourseAdapterExplorer;
 import com.example.authentication.Handler.CourseHandler;
@@ -57,8 +62,8 @@ public class Search extends Fragment implements OnItemClickedListener {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
+    public static Search newInstance(String param1, String param2) {
+        Search fragment = new Search();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,7 +83,7 @@ public class Search extends Fragment implements OnItemClickedListener {
         rvCourses = view.findViewById(R.id.rv_search);
         
         mCourses = new ArrayList<Course>();
-        mCourses = new CourseHandler(getContext(), null, null,1).loadDataHandler("All");
+        mCourses = new CourseHandler(getContext(), null, null,1).loadCourseHandler("All");
 
         mSearchAdapter = new CourseAdapterExplorer(getContext(), mCourses);
         mSearchAdapter.setClickedListener(this);
@@ -109,7 +114,7 @@ public class Search extends Fragment implements OnItemClickedListener {
     }
 
     private void backToExplorer() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.replace(R.id.navigation_search, fragment);
@@ -117,13 +122,33 @@ public class Search extends Fragment implements OnItemClickedListener {
     }
 
     @Override
-    public void onAddClicked(Course course) {
-        Toast.makeText(getContext(), "Added "+course.getCourseName(), Toast.LENGTH_SHORT).show();
+    public void onAddClicked(TextView textView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        textView.clearAnimation();
+        textView.startAnimation(a);
+    }
+
+    private void switchToCourseView(Course course) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
+        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.addToBackStack("view");
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onViewClicked(Course course) {
-        Toast.makeText(getContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
+        switchToCourseView(course);
     }
-    
+
+    @Override
+    public void onCourseClicked(ImageView imageView) {
+        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
+        a.reset();
+        imageView.clearAnimation();
+        imageView.startAnimation(a);
+    }
+
 }

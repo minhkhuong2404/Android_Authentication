@@ -15,7 +15,7 @@ import com.example.authentication.Handler.NotificationHandler;
 
 public class NotificationProvider extends ContentProvider {
     private static final String AUTHORITY = "com.example.authentication.Provider.NotificationProvider";
-    private static final String NOTIFICATION_TABLE = "Notifications";
+    private static final String NOTIFICATION_TABLE = "Notification";
     public static final int NOTIFICATION = 1;
 
     public static final Uri CONTENT_URI =

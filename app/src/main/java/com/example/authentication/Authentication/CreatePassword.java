@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,8 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        getSupportActionBar().hide(); // hide the title bar
         setContentView(R.layout.create_password);
         unbinder = ButterKnife.bind(this);
 
@@ -147,7 +150,6 @@ public class CreatePassword extends AppCompatActivity implements TextWatcher {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Account", "createUserWithEmail:success");
                             Toast.makeText(CreatePassword.this, "New account created", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Account", "createUserWithEmail:failure", task.getException());

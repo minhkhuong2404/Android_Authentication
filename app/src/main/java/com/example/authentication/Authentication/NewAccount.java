@@ -2,12 +2,14 @@ package com.example.authentication.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,8 @@ import com.example.authentication.Authentication.CreatePassword;
 import com.example.authentication.Authentication.LogIn;
 import com.example.authentication.R;
 import com.example.authentication.Walkthrough.SlideActivity;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +38,8 @@ public class NewAccount extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        getSupportActionBar().hide(); // hide the title bar
         setContentView(R.layout.new_account);
 
         unbinder = ButterKnife.bind(this);
@@ -50,7 +56,7 @@ public class NewAccount extends AppCompatActivity {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     signUpButton.performClick();
                 }
                 return false;
@@ -83,7 +89,9 @@ public class NewAccount extends AppCompatActivity {
     }
 
     private void switchToLogIn() {
+        ArrayList<String> categories = (ArrayList<String>) getIntent().getSerializableExtra("myCategories");
         Intent intent = new Intent(this, LogIn.class);
+        intent.putExtra("categories", categories);
         startActivity(intent);
     }
 

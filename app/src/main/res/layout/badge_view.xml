@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/grey"
+    tools:context=".BadgeView"
+    android:clickable="true"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/congratulation"/>
+    <Button
+        android:id="@+id/badge_congratulation_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/close"/>
+
+    <ImageView
+        android:id="@+id/badge_congratulation_icon"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="250dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Congratulations"
+        android:textSize="22dp"
+        android:textColor="@color/text"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="380dp"
+        android:fontFamily="@font/pt_sans_bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have achieved a new badge"
+        android:textSize="18dp"
+        android:textColor="@color/text"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="430dp"
+        android:fontFamily="@font/pt_sans_regular"/>
+
+    <TextView
+        android:id="@+id/badge_congratulation_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Step"
+        android:textSize="25dp"
+        android:textColor="@color/text"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="500dp"
+        android:fontFamily="@font/pt_sans_bold"/>
+
+    <Button
+        android:id="@+id/badge_congratulation_continue"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="80dp"
+        android:text="CONTINUE"/>
+</RelativeLayout>
