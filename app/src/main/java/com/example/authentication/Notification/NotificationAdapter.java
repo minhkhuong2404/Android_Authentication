@@ -23,19 +23,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private static final String TAG = "NotificationAdapter";
     private List<NotificationItem> mNotifications;
     private Context mContext;
-    private LayoutInflater mLayoutInflater;
     private int lastPosition = -1;
 
     public NotificationAdapter(Context context, List<NotificationItem> data) {
         mContext = context;
         mNotifications = data;
-        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mLayoutInflater.inflate(R.layout.notification_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item, parent, false);
         return new NotificationAdapter.NotificationViewHolder(itemView);    }
 
     @Override

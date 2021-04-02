@@ -1,6 +1,5 @@
 package com.example.authentication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -8,28 +7,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.airbnb.lottie.Lottie;
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieConfig;
-import com.example.authentication.Authentication.LogIn;
 import com.example.authentication.Handler.CourseHandler;
-import com.example.authentication.Home.Home;
 
 import org.json.JSONArray;
 import org.json.JSONException;

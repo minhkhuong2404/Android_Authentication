@@ -101,7 +101,6 @@ public class Home extends Fragment implements OnItemClickedListener {
     private List<Course> mCoursesBusiness;
     private ImageView imageview;
     private String removeEmailDomain = "";
-    private String username = "";
     private TextView topCourse1;
     private TextView topCourse2;
     private SharedPreferences sharedPreferences ;
@@ -118,7 +117,6 @@ public class Home extends Fragment implements OnItemClickedListener {
     private final long PERIOD_MS = 5000; // time in milliseconds between successive task executions.
     private String firstLogIn;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
-    private int loadTime = 0;
 
     public Home() {
         // Required empty public constructor
@@ -211,7 +209,7 @@ public class Home extends Fragment implements OnItemClickedListener {
         topCourse1.setText("Top course in " + mParam3);
 
         mCourses = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam3);
-        mCourseAdapter = new CourseAdapter(getContext(), mCourses);
+        mCourseAdapter = new CourseAdapter(getContext());
 
         mCourseAdapter.setClickedListener(this);
         mCourseAdapter.notifyDataSetChanged();
@@ -234,7 +232,7 @@ public class Home extends Fragment implements OnItemClickedListener {
         topCourse2.setText("Top course in " + mParam4);
         mCoursesBusiness = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam4);
 
-        mCourseAdapter = new CourseAdapter(getContext(), mCoursesBusiness);
+        mCourseAdapter = new CourseAdapter(getContext());
         mCourseAdapter.setClickedListener(this);
         mCourseAdapter.notifyDataSetChanged();
 
@@ -393,7 +391,7 @@ public class Home extends Fragment implements OnItemClickedListener {
     }
     public void updateList(){
         mCourses = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam3);
-        mCourseAdapter.setmCourses(mCourses);
+        mCourseAdapter.setData(mCourses);
         rvCourses.setAdapter(mCourseAdapter);
         rvCourses.invalidate();
 
@@ -402,7 +400,7 @@ public class Home extends Fragment implements OnItemClickedListener {
 
         // *********
         mCoursesBusiness = new CourseHandler(getContext(), null, null, 1).loadCourseHandler(mParam4);
-        mCourseAdapter.setmCourses(mCoursesBusiness);
+        mCourseAdapter.setData(mCoursesBusiness);
         rvCoursesBusiness.setAdapter(mCourseAdapter);
         rvCoursesBusiness.invalidate();
 
