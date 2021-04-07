@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/grey"
-    tools:context=".CourseView"
+    tools:context=".Object.Course.CourseView"
     android:clickable="true"
     android:focusable="true">
 
@@ -58,9 +58,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/course_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Category: "
+            android:text="@string/course_category"
             android:textColor="@color/text"
             android:textSize="18sp"
             android:fontFamily="@font/pt_sans_bold"
@@ -81,9 +82,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/course_before_sale_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Before sale price: $ "
+            android:text="@string/course_before_sale_price"
             android:textColor="@color/text"
             android:textSize="18sp"
             android:fontFamily="@font/pt_sans_bold"
@@ -104,9 +106,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/course_after_sale_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="After sale price: $ "
+            android:text="@string/course_after_sale_price"
             android:textColor="@color/text"
             android:textSize="18sp"
             android:fontFamily="@font/pt_sans_bold"
@@ -127,9 +130,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <TextView
+            android:id="@+id/course_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rate: "
+            android:text="@string/course_rate"
             android:textColor="@color/text"
             android:textSize="18sp"
             android:fontFamily="@font/pt_sans_bold"

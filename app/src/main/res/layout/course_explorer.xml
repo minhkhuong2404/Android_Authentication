@@ -91,7 +91,7 @@
                     android:id="@+id/button_add_explorer"
                     android:layout_width="55dp"
                     android:layout_height="25dp"
-                    android:text="Add"
+                    android:text="@string/add"
                     android:textSize="11sp"
                     android:paddingVertical="0dp"
                     android:paddingHorizontal="0dp"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Setting.Setting"
+    tools:context=".Fragment.Setting.Setting"
     android:background="@color/grey">
 
     <LinearLayout
@@ -12,9 +12,10 @@
         android:orientation="vertical">
         <!-- TODO: Update blank fragment layout -->
         <TextView
+            android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textColor="@color/text"
             android:textSize="22sp"
             android:layout_marginStart="15dp"
@@ -25,7 +26,7 @@
             android:id="@+id/setting_my_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My Account"
+            android:text="@string/setting_my_account"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -39,7 +40,7 @@
             android:id="@+id/setting_notifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notifications"
+            android:text="@string/setting_notifications"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -53,7 +54,7 @@
             android:id="@+id/setting_activity_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity History"
+            android:text="@string/setting_activity_history"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -67,7 +68,7 @@
             android:id="@+id/setting_billing_and_payment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Billing and Payment"
+            android:text="@string/setting_billing_and_payment"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -81,7 +82,7 @@
             android:id="@+id/setting_security_and_privacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Security and Privacy"
+            android:text="@string/setting_security_and_privacy"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -95,7 +96,7 @@
             android:id="@+id/setting_help"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Help"
+            android:text="@string/setting_help"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
             android:textSize="16sp"
@@ -109,7 +110,7 @@
             android:id="@+id/sign_out_btn"
             android:layout_width="180dp"
             android:layout_height="50dp"
-            android:text="Sign Out"
+            android:text="@string/sign_out_btn"
             android:layout_gravity="center"
             android:fontFamily="@font/pt_sans_regular"/>
     </LinearLayout>

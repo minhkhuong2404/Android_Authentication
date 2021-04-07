@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Authentication.LogIn"
+    tools:context=".Activity.Authentication.LogIn"
     android:background="@color/grey"
     android:id="@+id/my_login">
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:text="Log In"
+            android:text="@string/log_in"
             android:textSize="22sp"
             android:textColor="@color/text"
             android:textStyle="bold"
@@ -40,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:textColor="@color/black"
-            android:text="Enter your login details to access your account"
+            android:text="@string/enter_login_details"
             android:layout_marginStart="15dp" />
 
         <ImageView
@@ -60,7 +60,7 @@
             android:paddingRight="20dp"
             android:paddingStart="20dp"
             android:background="@drawable/text_field"
-            android:inputType="textEmailAddress"
+            android:hint="@string/enter_email_field_log_in"
             android:fontFamily="@font/pt_sans_regular"
             android:textColor="@color/text" />
 

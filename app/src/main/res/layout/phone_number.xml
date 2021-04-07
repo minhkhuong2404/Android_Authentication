@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Authentication.PhoneNumber"
+    tools:context=".Activity.Authentication.PhoneNumber"
     android:background="@color/grey">
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:text="Phone Number"
+            android:text="@string/phone_number"
             android:textSize="22sp"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
@@ -39,7 +39,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:textColor="@color/black"
-            android:text="Enter your moblie number to enable verification"
+            android:text="@string/enter_phone_number"
             android:layout_marginStart="15dp" />
 
         <EditText
@@ -53,6 +53,7 @@
             android:paddingRight="20dp"
             android:paddingStart="20dp"
             android:background="@drawable/text_field"
+            android:hint="@string/enter_phone_number_field"
             android:inputType="phone"
             android:drawableLeft="@drawable/ic_baseline_local_phone_24"
             android:drawableStart="@drawable/ic_baseline_local_phone_24"

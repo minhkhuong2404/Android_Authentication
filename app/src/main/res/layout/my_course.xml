@@ -40,9 +40,10 @@
 
 
         <TextView
+            android:id="@+id/my_courses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My Courses"
+            android:text="@string/my_courses"
             android:textColor="@color/text"
             android:textSize="22sp"
             android:layout_marginStart="15dp"

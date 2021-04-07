@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="wrap_content"
+<LinearLayout
+    android:layout_width="wrap_content"
     android:id="@+id/background_slide_pager"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -8,7 +9,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/orange_background">
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="5dp">
         <TextView
@@ -19,6 +20,8 @@
             android:textColor="@color/white"
             android:text="Business MasterClass 1"
             android:textSize="18sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:fontFamily="@font/pt_sans_bold"
             android:padding="10dp"/>
         <TextView
@@ -28,6 +31,8 @@
             android:layout_marginHorizontal="20dp"
             android:layout_alignParentTop="true"
             android:text="Business"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/white"
             android:layout_marginTop="25dp"
             android:padding="10dp"

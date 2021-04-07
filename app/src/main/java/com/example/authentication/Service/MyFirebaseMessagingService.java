@@ -16,9 +16,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.authentication.Handler.NotificationHandler;
-import com.example.authentication.MainActivity;
-import com.example.authentication.Notification.NotificationItem;
+import com.example.authentication.Model.Handler.NotificationHandler;
+import com.example.authentication.Fragment.ManageAppFragment;
+import com.example.authentication.Object.NotificationItem;
 import com.example.authentication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -163,7 +163,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) throws ParseException {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ManageAppFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         NotificationHandler notifHandler = new NotificationHandler(this, null,null,1);

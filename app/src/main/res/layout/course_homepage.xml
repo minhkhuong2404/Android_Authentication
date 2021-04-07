@@ -90,7 +90,7 @@
                 android:id="@+id/btnAdd"
                 android:layout_width="35dp"
                 android:layout_height="20dp"
-                android:text="Add"
+                android:text="@string/add"
                 android:textSize="8sp"
                 android:paddingVertical="0dp"
                 android:paddingHorizontal="0dp"

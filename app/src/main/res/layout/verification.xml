@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Authentication.Verification"
+    tools:context=".Activity.Authentication.Verification"
     android:background="@color/grey">
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:text="Verification"
+            android:text="@string/verification"
             android:textSize="22sp"
             android:textColor="@color/text"
             android:fontFamily="@font/pt_sans_bold"
@@ -42,7 +42,7 @@
             android:layout_marginLeft="20dp"
             android:textColor="@color/black"
             android:fontFamily="@font/pt_sans_regular"
-            android:text="Please enter code to verify your phone number"
+            android:text="@string/enter_phone_verification"
             android:layout_marginStart="20dp" />
 
         <LinearLayout
@@ -139,14 +139,14 @@
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:text="I didn't receive"
+            android:text="@string/did_not_receive"
             android:fontFamily="@font/pt_sans_regular"/>
 
         <TextView
             android:id="@+id/resend_verification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RESEND"
+            android:text="@string/resend_verification"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:textColor="@color/orange_400"
