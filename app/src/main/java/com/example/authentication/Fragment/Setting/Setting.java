@@ -59,7 +59,7 @@ public class Setting extends AbstractFragment {
      * @return A new instance of fragment Profile.
      */
     // TODO: Rename and change types and number of parameters
-    public static Setting newInstance(String param1, String param2) {
+    public Setting newInstance(String param1, String param2) {
         Setting fragment = new Setting();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -96,23 +96,23 @@ public class Setting extends AbstractFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        settings = view.findViewById(R.id.setting);
-        billingActivity = view.findViewById(R.id.setting_billing_and_payment);
-        securityActivity = view.findViewById(R.id.setting_security_and_privacy);
+        settings = findViewById(R.id.setting);
+        billingActivity = findViewById(R.id.setting_billing_and_payment);
+        securityActivity = findViewById(R.id.setting_security_and_privacy);
 
-        signOutButton = view.findViewById(R.id.sign_out_btn);
+        signOutButton = findViewById(R.id.sign_out_btn);
         signOutButton.setOnClickListener(v -> switchToLogIn());
 
-        historyActivity = view.findViewById(R.id.setting_activity_history);
-        historyActivity.setOnClickListener(v -> switchToMyCourse());
+        historyActivity = findViewById(R.id.setting_activity_history);
+        historyActivity.setOnClickListener(v -> switchToOtherFragment(new ActivityHistory(), "my_course", mParam1, mParam2));
 
-        notificationActivity = view.findViewById(R.id.setting_notifications);
-        notificationActivity.setOnClickListener(v -> switchToNotification());
+        notificationActivity = findViewById(R.id.setting_notifications);
+        notificationActivity.setOnClickListener(v -> switchToOtherFragment(new Notification(), "notification", mParam1, mParam2));
 
-        profileActivity = view.findViewById(R.id.setting_my_account);
-        profileActivity.setOnClickListener(v -> switchToProfile());
+        profileActivity = findViewById(R.id.setting_my_account);
+        profileActivity.setOnClickListener(v -> switchToOtherFragment(new MyAccount(), "profile", mParam1, mParam2));
 
-        helpActivity = view.findViewById(R.id.setting_help);
+        helpActivity = findViewById(R.id.setting_help);
         helpActivity.setOnClickListener(v -> switchToHelp());
 
     }
@@ -123,30 +123,8 @@ public class Setting extends AbstractFragment {
         requireActivity().startActivity(i);
     }
 
-    private void switchToProfile() {
-        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, MyAccount.newInstance(mParam1, mParam2), "profile");
-        fragmentTransaction.addToBackStack("profile").commit();
-    }
-
     private void switchToLogIn() {
         startActivity(new Intent(getActivity(), LogIn.class));
         getActivity().finish();
     }
-
-    private void switchToMyCourse() {
-        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, ActivityHistory.newInstance(mParam1, mParam2), "my_course");
-        fragmentTransaction.addToBackStack("my_course").commit();
-    }
-
-    private void switchToNotification() {
-        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, new Notification(), "notification");
-        fragmentTransaction.addToBackStack("notification").commit();
-    }
-
 }

@@ -64,7 +64,7 @@ public class Notification extends AbstractFragment {
      * @return A new instance of fragment Notification.
      */
     // TODO: Rename and change types and number of parameters
-    public static Notification newInstance(String param1, String param2) {
+    public Notification newInstance(String param1, String param2) {
         Notification fragment = new Notification();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -93,8 +93,8 @@ public class Notification extends AbstractFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvNotification = view.findViewById(R.id.rv_notification_setting);
-        notificationTextView = view.findViewById(R.id.notification_setting);
+        rvNotification = findViewById(R.id.rv_notification_setting);
+        notificationTextView = findViewById(R.id.notification_setting);
 
         try {
             mNotifications = new NotificationHandler(getContext(), null, null, 1).loadNotificationHandler();
@@ -108,11 +108,7 @@ public class Notification extends AbstractFragment {
 
         rvNotification.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        backButton = view.findViewById(R.id.back_btn_notification_setting);
-        backButton.setOnClickListener(v -> switchToSettings());
-    }
-
-    private void switchToSettings() {
-        requireActivity().getSupportFragmentManager().popBackStack();
+        backButton = findViewById(R.id.back_btn_notification_setting);
+        backButton.setOnClickListener(v -> goBack());
     }
 }

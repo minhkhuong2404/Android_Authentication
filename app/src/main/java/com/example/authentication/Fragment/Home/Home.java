@@ -7,19 +7,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -30,39 +33,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.authentication.Adapter.RecyclerView.CourseRecyclerViewAdapter;
 import com.example.authentication.Adapter.SlidePager.ImageSliderAdapter;
-import com.example.authentication.Object.Course.CourseView;
-import com.example.authentication.Adapter.SlidePager.FixedSpeedScroller;
 import com.example.authentication.Fragment.AbstractFragment;
-import com.example.authentication.Model.Handler.CourseHandler;
 import com.example.authentication.Language.LocaleHelper;
-import com.example.authentication.Object.Course.OnItemClickedListener;
+import com.example.authentication.Model.Handler.CourseHandler;
 import com.example.authentication.Object.Course.Course;
+import com.example.authentication.Object.Course.CourseView;
+import com.example.authentication.Object.Course.OnItemClickedListener;
 import com.example.authentication.R;
+
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
@@ -90,7 +76,6 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     private CourseRecyclerViewAdapter mCourseAdapter;
     private ImageView imageview;
     private String removeEmailDomain = "", ImageUri = "", firstLogIn, topCourseString1, topCourseString2;
-    private SharedPreferences sharedPreferences ;
     private LottieAnimationView lottieAnimationView, lottieAnimationView2;
 
     private CharSequence time_of_day = "";
@@ -99,12 +84,15 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
 
     private ViewPager imageSlider;
     private int currentPage = 0;
-    private final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
-    private final long PERIOD_MS = 5000; // time in milliseconds between successive task executions.
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     public Home() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected Home newInstance(String mParam1, String mParam2) {
+        return null;
     }
 
     /**
@@ -116,7 +104,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2, String param3, String param4) {
+    public Home newInstance(String param1, String param2, String param3, String param4) {
         Home fragment = new Home();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -176,44 +164,41 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         firstLogIn = mParam2;
         topCourseString1 = mParam3;
         topCourseString2 = mParam4;
 
-        ImageUri = sharedPreferences.getString("imagePreference", "photo");
-        removeEmailDomain = sharedPreferences.getString("username", "No name");
+        ImageUri = getStringPref("imagePreference", "photo");
+        removeEmailDomain = getStringPref("username", "No name");
 
-        rvCourses = view.findViewById(R.id.rv_course_design);
-        rvCoursesBusiness = view.findViewById(R.id.rv_course_business);
-        seeAllCourse1 = view.findViewById(R.id.see_all_design_courses);
-        seeAllCourse2 = view.findViewById(R.id.see_all_business_courses);
-        designIcon = view.findViewById(R.id.design_icon);
-        codeIcon = view.findViewById(R.id.code_icon);
-        businessIcon = view.findViewById(R.id.business_icon);
-        photographIcon = view.findViewById(R.id.photograph_icon);
+        rvCourses = findViewById(R.id.rv_course_design);
+        rvCoursesBusiness = findViewById(R.id.rv_course_business);
+        seeAllCourse1 = findViewById(R.id.see_all_design_courses);
+        seeAllCourse2 = findViewById(R.id.see_all_business_courses);
+        designIcon = findViewById(R.id.design_icon);
+        codeIcon = findViewById(R.id.code_icon);
+        businessIcon = findViewById(R.id.business_icon);
+        photographIcon = findViewById(R.id.photograph_icon);
 
         // get the username from the email
         if (!mParam1.split("@")[0].equals("")) {
             removeEmailDomain = mParam1.split("@")[0];
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            editor.putString("username", removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1)).apply();
+            putStringPref("username", removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
         }
 
-        tvUsername = view.findViewById(R.id.username);
+        tvUsername = findViewById(R.id.username);
 
-        topCourse1 = view.findViewById(R.id.top_course_1);
+        topCourse1 = findViewById(R.id.top_course_1);
 
         setRvCourses(rvCourses, topCourseString1);
 
-        topCourse2 = view.findViewById(R.id.top_course_2);
+        topCourse2 = findViewById(R.id.top_course_2);
 
         setRvCourses(rvCoursesBusiness, topCourseString2);
 
         // load avatar images
-        imageview = getView().findViewById(R.id.avatar);
+        imageview = findViewById(R.id.avatar);
         imageview.setOnClickListener(v -> onLaunchPhoto());
 
         if (!ImageUri.equals("photo")) {
@@ -238,22 +223,20 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
                 getResources().getColor(R.color.violet)
         };
 
-        imageSlider = view.findViewById(R.id.imageSlider);
-        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(getContext(), urls);
+        imageSlider = findViewById(R.id.imageSlider);
+        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(currentPage, getContext(), urls, imageSlider);
         imageSlider.setAdapter(imageSliderAdapter);
         imageSlider.setPageMargin(dpToPx(8));
         imageSlider.setBackgroundResource(R.drawable.background_slide_pager);
-
-        setScrollSpeed(currentPage, urls, imageSlider);
-        autoScrollPageAdapter(urls, imageSlider);
+        imageSliderAdapter.init();
 
         // Indicator:
-        LinearLayout indicator = view.findViewById(R.id.indicator);
+        LinearLayout indicator = findViewById(R.id.indicator);
         for (int i = 0; i < urls.length; i++) {
             // COLOR_ACTIVE ứng với chấm ứng với vị trí hiện tại của ViewPager,
             // COLOR_INACTIVE ứng với các chấm còn lại
             // ViewPager có vị trí mặc định là 0, vì vậy color ở vị trí i == 0 sẽ là COLOR_ACTIVE
-            indicator.addView(createDot(indicator.getContext(), i == 0 ? COLOR_ACTIVE : COLOR_INACTIVE));
+            indicator.addView(imageSliderAdapter.createDot(indicator.getContext(), i == 0 ? COLOR_ACTIVE : COLOR_INACTIVE));
         }
 
         // Thay đổi màu các chấm khi ViewPager thay đổi vị trí:
@@ -289,58 +272,13 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
         });
     }
 
-    View createDot(Context context, @ColorInt int color) {
-        View dot = new View(context);
-        LinearLayout.MarginLayoutParams dotParams = new LinearLayout.MarginLayoutParams(20, 20);
-        dotParams.setMargins(20, 10, 20, 10);
-        dot.setLayoutParams(dotParams);
-        ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-        drawable.setTint(color);
-        dot.setBackground(drawable);
-        return dot;
-    }
-
-    private void autoScrollPageAdapter(Integer[] totalPages, ViewPager viewPager) {
-
-        final Handler handler = new Handler();
-        final Runnable Update = () -> {
-            if (currentPage == totalPages.length) {
-                currentPage = 0;
-            }
-            viewPager.setCurrentItem(currentPage, true);
-            currentPage += 1;
-        };
-
-        Timer timer = new Timer(); // This will create a new Thread
-        timer.schedule(new TimerTask() { // task to be scheduled
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, DELAY_MS, PERIOD_MS);
-    }
-
-    private void setScrollSpeed(int currentPage, Integer[] totalPages, ViewPager viewPager) {
-        try {
-            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
-            mScroller.setAccessible(true);
-            FixedSpeedScroller scroller = new FixedSpeedScroller(viewPager.getContext(), new AccelerateInterpolator());
-            if (currentPage == totalPages.length) {
-                scroller.setmDuration(50);
-            } else {
-                scroller.setmDuration(1000);
-            }
-            mScroller.set(viewPager, scroller);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ignored) {
-        }
-    }
-
     public void loading() {
         try {
-            if (getView().getVisibility() == View.VISIBLE) {
-                lottieAnimationView = getView().findViewById(R.id.loading1);
+            if (lottieAnimationView.getVisibility() == View.VISIBLE) {
+                lottieAnimationView = findViewById(R.id.loading1);
                 lottieAnimationView.setVisibility(GONE);
-                lottieAnimationView2 = getView().findViewById(R.id.loading2);
+            } else if (lottieAnimationView2.getVisibility() == View.VISIBLE) {
+                lottieAnimationView2 = findViewById(R.id.loading2);
                 lottieAnimationView2.setVisibility(GONE);
             }
         } catch (NullPointerException ignored) {
@@ -385,8 +323,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
 
             }else if (items[which].equals("Gallery")){
                 Log.i("GalleryCode",""+ 0);
-                Intent GalleryIntent;
-                GalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent GalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 GalleryIntent.setType("image/*");
                 GalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(GalleryIntent,0);
@@ -399,24 +336,27 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        imageview = getView().findViewById(R.id.avatar);
+        imageview = findViewById(R.id.avatar);
         switch(requestCode) {
             case 0:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    Glide.with(getView()).load(selectedImage).into(imageview);
-                    sharedPreferences.edit().putString("imagePreference", selectedImage.toString()).apply();
+                    loadAvatar(selectedImage, imageview, selectedImage.toString());
                 }
 
                 break;
             case 1:
                 if(resultCode == RESULT_OK){
                     Bitmap resized = Bitmap.createScaledBitmap((Bitmap) imageReturnedIntent.getExtras().get("data"), 40,40, true);
-                    Glide.with(getView()).load(getImageUri(getContext(), resized)).into(imageview);
-                    sharedPreferences.edit().putString("imagePreference", getImageUri(getContext(), resized).toString()).apply();
+                    loadAvatar(getImageUri(getContext(), resized), imageview, getImageUri(getContext(), resized).toString());
                 }
                 break;
         }
+    }
+
+    public void loadAvatar(Uri uri, ImageView image, String sharedPreference) {
+        Glide.with(getView()).load(uri).into(image);
+        putStringPref("imagePreference", sharedPreference);
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -441,8 +381,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
                 } else {
-                    ActivityCompat
-                            .requestPermissions(
+                    ActivityCompat.requestPermissions(
                                     (Activity) context,
                                     new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
@@ -472,7 +411,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     private void switchToCourseView(Course course) {
         FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.add(R.id.myContainer, new CourseView().newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
         fragmentTransaction.addToBackStack("view").commit();
     }
 
@@ -483,42 +422,11 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
 
     @Override
     public void onAddClicked(TextView textView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        textView.clearAnimation();
-        textView.startAnimation(a);
+        startAnimation(textView);
     }
 
     @Override
     public void onCourseClicked(ImageView imageView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        imageView.clearAnimation();
-        imageView.startAnimation(a);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (firstLogIn.equals("0")) {
-            currentPage = 0;
-            firstLogIn = "1";
-        } else {
-            currentPage = sharedPreferences.getInt("PageHome", 0);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("PageHome", currentPage - 1).apply();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("PageHome", currentPage).apply();
+        startAnimation(imageView);
     }
 }

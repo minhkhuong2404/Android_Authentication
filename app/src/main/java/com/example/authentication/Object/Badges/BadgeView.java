@@ -13,14 +13,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.authentication.Fragment.AbstractFragment;
 import com.example.authentication.R;
 
-public class BadgeView extends Fragment {
+public class BadgeView extends AbstractFragment {
     private static final String BADGE_ICON = "param1";
     private static final String BADGE_NAME = "param2";
 
     private int getBadgeIcon;
     private String getBadgeName;
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.badge_view;
+    }
+
+    @Override
+    public void UpdateLanguage(String language) {
+
+    }
 
     public BadgeView() {
         // Required empty public constructor
@@ -33,7 +44,7 @@ public class BadgeView extends Fragment {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static BadgeView newInstance(int badgeIcon, String badgeName) {
+    public BadgeView newInstance(int badgeIcon, String badgeName) {
         BadgeView fragment = new BadgeView();
         Bundle args = new Bundle();
         args.putInt(BADGE_ICON, badgeIcon);
@@ -50,32 +61,26 @@ public class BadgeView extends Fragment {
             getBadgeIcon = getArguments().getInt(BADGE_ICON);
             getBadgeName = getArguments().getString(BADGE_NAME);
         }
-
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.badge_view, container, false);
+    protected BadgeView newInstance(String mParam1, String mParam2) {
+        return null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        Button backToBadgeCloseBtn = view.findViewById(R.id.badge_congratulation_close);
-        Button backToBadgeContinueBtn = view.findViewById(R.id.badge_congratulation_continue);
-        ImageView badgeIcon = view.findViewById(R.id.badge_congratulation_icon);
-        TextView badgeName = view.findViewById(R.id.badge_congratulation_name);
+        Button backToBadgeCloseBtn = findViewById(R.id.badge_congratulation_close);
+        Button backToBadgeContinueBtn = findViewById(R.id.badge_congratulation_continue);
+        ImageView badgeIcon = findViewById(R.id.badge_congratulation_icon);
+        TextView badgeName = findViewById(R.id.badge_congratulation_name);
 
-        backToBadgeCloseBtn.setOnClickListener(v -> backToBadge());
+        backToBadgeCloseBtn.setOnClickListener(v -> goBack());
 
-        backToBadgeContinueBtn.setOnClickListener(v -> backToBadge());
+        backToBadgeContinueBtn.setOnClickListener(v -> goBack());
 
         Glide.with(getContext()).load(getBadgeIcon).into(badgeIcon);
         badgeName.setText(getBadgeName);
-    }
-
-    private void backToBadge() {
-        requireActivity().getSupportFragmentManager().popBackStack();
     }
 }

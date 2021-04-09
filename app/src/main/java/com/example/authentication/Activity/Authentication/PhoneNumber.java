@@ -79,18 +79,17 @@ public class PhoneNumber extends AbstractActivity {
             return false;
 
         });
+        int digits = phoneNumber.getText().toString().length();
 
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int digits = phoneNumber.getText().toString().length();
                 if (digits > 1)
                     lastChar = phoneNumber.getText().toString().substring(digits-1);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int digits = phoneNumber.getText().toString().length();
 //                Log.d("LENGTH",""+digits);
                 if (!lastChar.equals("-")) {
                     if (digits == 3 || digits == 7) {
@@ -156,9 +155,7 @@ public class PhoneNumber extends AbstractActivity {
     public boolean validate() {
         boolean valid;
         String phone2 = phoneNumber.getText().toString();
-
         valid = checkPhoneNumber(phone2);
-
         return valid;
     }
 

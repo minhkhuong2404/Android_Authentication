@@ -172,11 +172,7 @@ public class Verification extends AbstractActivity {
 
                     // Get new FCM registration token
                     String token = task.getResult();
-
-                    // Log and toast
-//                        String msg = getString(R.string.app_name, token);
                     Log.d("FCM", token);
-//                        Toast.makeText(Verification.this, token, Toast.LENGTH_SHORT).show();
                 });
 
         callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -191,7 +187,6 @@ public class Verification extends AbstractActivity {
             {
                 Toast.makeText(Verification.this, "Invalid Phone Number, Please enter correct phone number with your country code...", Toast.LENGTH_LONG).show();
                 loadingBar.dismiss();
-
             }
 
             public void onCodeSent(String verificationId,
@@ -202,7 +197,6 @@ public class Verification extends AbstractActivity {
                 mResendToken = token;
                 Toast.makeText(Verification.this, "Code has been sent, please check and verify...", Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
-
             }
         };
 

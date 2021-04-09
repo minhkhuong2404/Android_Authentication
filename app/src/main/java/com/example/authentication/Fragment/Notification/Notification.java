@@ -45,7 +45,7 @@ public class Notification extends AbstractFragment {
     private TextView notificationTextView;
     private List<NotificationItem> mNotifications = new ArrayList<>();
 
-    public static Notification newInstance(String param1, String param2) {
+    public Notification newInstance(String param1, String param2) {
         Notification fragment = new Notification();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -69,8 +69,8 @@ public class Notification extends AbstractFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvNotification = view.findViewById(R.id.rv_notification);
-        notificationTextView = view.findViewById(R.id.notification);
+        rvNotification = findViewById(R.id.rv_notification);
+        notificationTextView = findViewById(R.id.notification);
 
         try {
             mNotifications = new NotificationHandler(getContext(), null, null, 1).loadNotificationHandler();

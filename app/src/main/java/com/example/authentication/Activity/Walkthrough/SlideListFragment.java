@@ -13,6 +13,7 @@ import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.authentication.Fragment.AbstractFragment;
 import com.example.authentication.Language.LocaleHelper;
@@ -25,7 +26,7 @@ public class SlideListFragment extends AbstractFragment {
     private TextView title, desc;
     private ImageView ind1, ind2, ind3;
     private String path1, path2, path3;
-    static SlideListFragment newInstance(int num) {
+    public SlideListFragment newInstance(int num) {
         SlideListFragment f = new SlideListFragment();
         // Supply num input as an argument.
         Bundle args = new Bundle();
@@ -44,13 +45,13 @@ public class SlideListFragment extends AbstractFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ind1 = view.findViewById(R.id.ind1);
-        ind2 = view.findViewById(R.id.ind2);
-        ind3 = view.findViewById(R.id.ind3);
+        ind1 = findViewById(R.id.ind1);
+        ind2 = findViewById(R.id.ind2);
+        ind3 = findViewById(R.id.ind3);
 
-        title= view.findViewById(R.id.title);
-        desc= view.findViewById(R.id.desc);
-        videoView = view.findViewById(R.id.video_intro);
+        title= findViewById(R.id.title);
+        desc= findViewById(R.id.desc);
+        videoView = findViewById(R.id.video_intro);
 
         path1 = "android.resource://" + getContext().getPackageName() + "/" + R.raw.elearning;
         path2 = "android.resource://" + getContext().getPackageName() + "/" + R.raw.success;
@@ -62,9 +63,9 @@ public class SlideListFragment extends AbstractFragment {
         videoView.setMediaController(mc);
         videoView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus)
-                ((VideoView) v.findViewById(R.id.video_intro)).start();
+                ((VideoView) findViewById(R.id.video_intro)).start();
             else
-                ((VideoView) v.findViewById(R.id.video_intro)).pause();
+                ((VideoView) findViewById(R.id.video_intro)).pause();
         });
 
         switch (mNum)
@@ -116,8 +117,12 @@ public class SlideListFragment extends AbstractFragment {
     }
 
     @Override
+    protected SlideListFragment newInstance(String mParam1, String mParam2) {
+        return null;
+    }
+
+    @Override
     public void onPause() {
-        Log.d("video", "onPause called");
         super.onPause();
         stopPosition = videoView.getCurrentPosition(); //stopPosition is an int
         videoView.pause();
@@ -125,7 +130,6 @@ public class SlideListFragment extends AbstractFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("video", "onResume called");
         videoView.seekTo(stopPosition);
         videoView.start(); //Or use resume() if it doesn't work. I'm not sure
     }

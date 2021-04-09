@@ -73,7 +73,6 @@ public class LogIn extends AbstractActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         });
 
         loginPassword.setOnEditorActionListener((v, actionId, event) -> {
@@ -81,7 +80,6 @@ public class LogIn extends AbstractActivity {
                 loginButton.performClick();
             }
             return false;
-
         });
     }
 
@@ -131,7 +129,6 @@ public class LogIn extends AbstractActivity {
     private void switchToSplash() {
         Intent switchToHome = new Intent(this, Splash.class);
         switchToHome.putExtra("user", loginEmail.getText().toString());
-
         startActivity(switchToHome);
     }
 
@@ -152,7 +149,6 @@ public class LogIn extends AbstractActivity {
                     }
                 });
         setResult(RESULT_OK, null);
-
     }
 
     public void onLogInFail() {

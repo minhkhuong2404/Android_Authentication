@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.authentication.Activity.AbstractActivity;
 import com.example.authentication.Fragment.Explorer.Explorer;
 import com.example.authentication.Model.Handler.CourseHandler;
 import com.example.authentication.Object.Course.Course;
@@ -35,14 +36,13 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ManageAppFragment extends AppCompatActivity {
+public class ManageAppFragment extends AbstractActivity {
 
     BottomNavigationView bottomNavigation;
     int count = 0;
     private boolean imageOk;
     private String newCourseImage;
     private AsyncTaskExample asyncTask;
-    private SharedPreferences sharedPreferences;
     private int index = 0;
 
     @Override
@@ -52,7 +52,7 @@ public class ManageAppFragment extends AppCompatActivity {
         getSupportActionBar().hide(); // hide the title bar
         setContentView(R.layout.main_activity);
         playSong();
-        PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("Finished", "").apply();
+        putStringPref("Finished", "");
 
         asyncTask = new AsyncTaskExample();
         asyncTask.execute();
@@ -60,7 +60,7 @@ public class ManageAppFragment extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNav_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        new Handler().postDelayed(() -> openFragment(Home.newInstance(getIntent().getStringExtra("username"), getIntent().getStringExtra("slidePager"),
+        new Handler().postDelayed(() -> openFragment(new Home().newInstance(getIntent().getStringExtra("username"), getIntent().getStringExtra("slidePager"),
                 getIntent().getStringExtra("generate1"),
                 getIntent().getStringExtra("generate2"))
                 , "Home"), 0);
@@ -78,30 +78,34 @@ public class ManageAppFragment extends AppCompatActivity {
             item -> {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        openFragment(Home.newInstance(getIntent().getStringExtra("username"),"", getIntent().getStringExtra("generate1"), getIntent().getStringExtra("generate2")), "Home");
+                        openFragment(new Home().newInstance(getIntent().getStringExtra("username"),"", getIntent().getStringExtra("generate1"), getIntent().getStringExtra("generate2")), "Home");
                         Log.d("Category Main Home", getIntent().getStringExtra("generate1") + " --- " + getIntent().getStringExtra("generate2"));
                         return true;
 
                     case R.id.navigation_search:
                         if (count == 0) {
-                            openFragment(Explorer.newInstance("", getIntent().getStringExtra("slidePagerExplorer")), "Search");
+                            openFragment(new Explorer().newInstance("", getIntent().getStringExtra("slidePagerExplorer")), "Search");
                             count += 1;
                         } else {
-                            openFragment(Explorer.newInstance("", ""), "Search");
+                            openFragment(new Explorer().newInstance("", ""), "Search");
                         }
                         return true;
 
                     case R.id.navigation_notification:
-                        openFragment(Notification.newInstance("", ""), "Notification");
+                        openFragment(new Notification().newInstance("", ""), "Notification");
                         return true;
 
                     case R.id.navigation_profile:
                         Log.d("Category Main Setting", getIntent().getStringExtra("study") + " --- " + getIntent().getStringExtra("collection"));
-                        openFragment(Setting.newInstance(getIntent().getStringExtra("study"), getIntent().getStringExtra("collection")), "Setting");
+                        openFragment(new Setting().newInstance(getIntent().getStringExtra("study"), getIntent().getStringExtra("collection")), "Setting");
                         return true;
                 }
                 return false;
             };
+
+    @Override
+    public void UpdateLanguage(String language) {
+    }
 
     private class AsyncTaskExample extends AsyncTask<String, Void, String> {
 
@@ -120,7 +124,6 @@ public class ManageAppFragment extends AppCompatActivity {
                 ((Home)fragment).loading();
                 ((Home)fragment).updateList();
             }
-
         }
     }
 
@@ -160,15 +163,9 @@ public class ManageAppFragment extends AppCompatActivity {
                     imageOk = connection.getHeaderField("Content-Type").startsWith("image/");
                     index += 1;
                 }
-                if ((i+1) % 10 == 0) {
-                    Log.d("Changed", "Data");
-                }
-//                Log.d("New id", newCourseImage);
-
                 dbHandler.addCourseHandler(new Course(courseName, CourseBeforeSalePrice, CourseAfterSalePrice, Rate,  newCourseImage, CourseCategory));
             }
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            sharedPreferences.edit().putString("Finished", "").apply();
+            putStringPref("Finished", "");
 
         } catch (JSONException | IOException e) {
             e.printStackTrace();

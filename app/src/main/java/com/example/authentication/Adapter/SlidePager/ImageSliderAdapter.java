@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.authentication.Adapter.SlidePager.Abstract.AbstractSlidePagerAdapter;
 import com.example.authentication.Language.LocaleHelper;
@@ -20,9 +21,8 @@ public class ImageSliderAdapter extends AbstractSlidePagerAdapter<Integer> {
     private String[] title;
     private LayoutInflater inflater;
     private Context context;
-
-    public ImageSliderAdapter(Context context, Integer[] background) {
-        super(background);
+    public ImageSliderAdapter(int currentPage, Context context, Integer[] background, ViewPager viewPager) {
+        super(currentPage, background, viewPager);
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.background = background;
         this.context = context;

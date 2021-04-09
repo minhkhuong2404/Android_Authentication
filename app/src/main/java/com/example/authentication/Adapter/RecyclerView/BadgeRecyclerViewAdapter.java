@@ -24,7 +24,6 @@ public class BadgeRecyclerViewAdapter extends AbstractRecyclerViewAdapter<Badge,
     private List<Badge> mBadges;
     private Context mContext;
     private OnBadgeClickListener clickedListener;
-    private int lastPosition = -1;
 
     public BadgeRecyclerViewAdapter(Context context, List<Badge> data) {
         mContext = context;
@@ -43,20 +42,6 @@ public class BadgeRecyclerViewAdapter extends AbstractRecyclerViewAdapter<Badge,
     @Override
     public BadgeViewHolder initViewHolder(View view, @NonNull ViewGroup parent, int viewType) {
         return new BadgeViewHolder(view);
-    }
-
-    /**
-     * Here is the key method to apply the animation
-     */
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_in);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     class BadgeViewHolder extends AbstractViewHolder<Badge> {
@@ -102,7 +87,6 @@ public class BadgeRecyclerViewAdapter extends AbstractRecyclerViewAdapter<Badge,
                 }
                 v.setOnClickListener(null);
             });
-            setAnimation(itemView, position);
         }
     }
 }

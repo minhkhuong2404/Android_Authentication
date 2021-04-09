@@ -11,11 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,31 +20,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.authentication.Language.LocaleHelper;
-import com.example.authentication.Object.Badges.BadgeView;
-import com.example.authentication.Object.Badges.Badge;
 import com.example.authentication.Adapter.RecyclerView.BadgeRecyclerViewAdapter;
+import com.example.authentication.Adapter.RecyclerView.CourseExplorerRecyclerViewAdapter;
+import com.example.authentication.Adapter.RecyclerView.MyCollectionRecyclerViewAdapter;
+import com.example.authentication.Fragment.AbstractFragment;
+import com.example.authentication.Language.LocaleHelper;
+import com.example.authentication.Model.Handler.CourseHandler;
+import com.example.authentication.Object.Badges.Badge;
+import com.example.authentication.Object.Badges.BadgeView;
 import com.example.authentication.Object.Badges.OnBadgeClickListener;
-import com.example.authentication.Object.Course.CourseView;
+import com.example.authentication.Object.CollectionItem.CollectionItem;
 import com.example.authentication.Object.CollectionItem.OnCollectionClickedListener;
 import com.example.authentication.Object.Course.Course;
-import com.example.authentication.Adapter.RecyclerView.CourseExplorerRecyclerViewAdapter;
-import com.example.authentication.Model.Handler.CourseHandler;
-import com.example.authentication.Object.CollectionItem.CollectionItem;
-import com.example.authentication.Adapter.RecyclerView.MyCollectionRecyclerViewAdapter;
+import com.example.authentication.Object.Course.CourseView;
 import com.example.authentication.Object.Course.OnItemClickedListener;
 import com.example.authentication.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAccount extends Fragment implements OnCollectionClickedListener, OnItemClickedListener, OnBadgeClickListener {
+public class MyAccount extends AbstractFragment implements OnCollectionClickedListener, OnItemClickedListener, OnBadgeClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,10 +62,19 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
     private MyCollectionRecyclerViewAdapter myCourseCollectionAdapter;
     private CourseExplorerRecyclerViewAdapter myCoursesAdapter;
     private BadgeRecyclerViewAdapter myBadgeAdapter;
-    private SharedPreferences sharedPreferences ;
     private String removeEmailDomain = "", ImageUri;
     private TextView tvUsername;
     private ImageView imageview;
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.profile_setting;
+    }
+
+    @Override
+    public void UpdateLanguage(String language) {
+
+    }
 
     public MyAccount() {
         // Required empty public constructor
@@ -85,7 +90,7 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
      * @return A new instance of fragment Search.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyAccount newInstance(String param1, String param2) {
+    public MyAccount newInstance(String param1, String param2) {
         MyAccount fragment = new MyAccount();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -104,33 +109,23 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.profile_setting, container, false);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        ImageUri = getStringPref("imagePreference", "photo");
+        removeEmailDomain = getStringPref("username", "No name");
 
-        ImageUri = sharedPreferences.getString("imagePreference", "photo");
-        removeEmailDomain = sharedPreferences.getString("username", "No name");
+        rvBadges = findViewById(R.id.rv_my_badges_settings);
+        rvCollection  = findViewById(R.id.rv_collection_settings);
 
-        rvBadges = view.findViewById(R.id.rv_my_badges_settings);
-        rvCollection  = view.findViewById(R.id.rv_collection_settings);
-
-        tvUsername = view.findViewById(R.id.username_settings);
+        tvUsername = findViewById(R.id.username_settings);
         tvUsername.setText(removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
 
         imageview = requireView().findViewById(R.id.avatar_settings);
         if (checkPermissionWRITE_EXTERNAL_STORAGE(getContext())) {
             Glide.with(getView()).load(Uri.parse(ImageUri)).into(imageview);
         }
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String language = sharedPreferences.getString("Locale.Helper.Selected.Language", "en");
+        String language = getStringPref("Locale.Helper.Selected.Language", "en");
         Context context = LocaleHelper.setLocale(getContext(), language);
         Resources resources = context.getResources();
 
@@ -161,8 +156,8 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
         rvBadges.setAdapter(myBadgeAdapter);
         rvBadges.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        TextView searchButton = view.findViewById(R.id.back_btn_profile);
-        searchButton.setOnClickListener(v -> backToSettings());
+        TextView searchButton = findViewById(R.id.back_btn_profile);
+        searchButton.setOnClickListener(v -> goBack());
 
     }
 
@@ -253,30 +248,23 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
         rvBadges.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
     }
 
-    @Override
-    public void onAddClicked(TextView textView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        textView.clearAnimation();
-        textView.startAnimation(a);
-    }
-
     private void switchToCourseView(Course course) {
         FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.add(R.id.myContainer, new CourseView().newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
         fragmentTransaction.addToBackStack("view").commit();
     }
 
     private void switchToBadgeView(Badge badge) {
         FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, BadgeView.newInstance(badge.getBadgeIcon(), badge.getBadgeName()), "view");
+        fragmentTransaction.add(R.id.myContainer, new BadgeView().newInstance(badge.getBadgeIcon(), badge.getBadgeName()), "view");
         fragmentTransaction.addToBackStack("badge").commit();
     }
 
-    private void backToSettings() {
-        requireActivity().getSupportFragmentManager().popBackStack();
+    @Override
+    public void onAddClicked(TextView textView) {
+        startAnimation(textView);
     }
 
     @Override
@@ -286,10 +274,7 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
 
     @Override
     public void onCourseClicked(ImageView imageView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        imageView.clearAnimation();
-        imageView.startAnimation(a);
+        startAnimation(imageView);
     }
 
     @Override
@@ -299,9 +284,6 @@ public class MyAccount extends Fragment implements OnCollectionClickedListener, 
 
     @Override
     public void onBadgeClicked(ImageView imageView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        imageView.clearAnimation();
-        imageView.startAnimation(a);
+        startAnimation(imageView);
     }
 }

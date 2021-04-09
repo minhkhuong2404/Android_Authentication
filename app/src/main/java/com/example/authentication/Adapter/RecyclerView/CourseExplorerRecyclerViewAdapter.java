@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -30,7 +31,6 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
     private List<Course> mCourses;
     private Context mContext;
     private OnItemClickedListener clickedListener;
-    private int lastPosition = -1;
 
     public CourseExplorerRecyclerViewAdapter(Context context, List<Course> data) {
         mContext = context;
@@ -51,15 +51,6 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
         return new CourseViewHolder(view);
     }
 
-    private void setAnimation(View viewToAnimate, int position) {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_in);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
-
     class CourseViewHolder extends AbstractViewHolder<Course> {
         private TextView tvCourseName, tvAfterSalePrice, tvBeforeSalePrice, tvRate;
         private ImageView tvCourseImage;
@@ -68,6 +59,13 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
         @SuppressLint("ClickableViewAccessibility")
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvCourseName = itemView.findViewById(R.id.course_name_explorer);
+            tvAfterSalePrice = itemView.findViewById(R.id.after_sale_price_explorer);
+            tvBeforeSalePrice = itemView.findViewById(R.id.before_sale_price_explorer);
+            tvRate = itemView.findViewById(R.id.rate_explorer);
+            tvCourseImage = itemView.findViewById(R.id.course_image_explorer);
+            btnAdd = itemView.findViewById(R.id.button_add_explorer);
+            Log.d("Course Explorer", "New create");
         }
         @Override
         public void bind ( int position, Course course){
@@ -75,13 +73,6 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
             String language = sharedPreferences.getString("Locale.Helper.Selected.Language", "en");
             Context context = LocaleHelper.setLocale(itemView.getContext(), language);
             Resources resources = context.getResources();
-
-            tvCourseName = itemView.findViewById(R.id.course_name_explorer);
-            tvAfterSalePrice = itemView.findViewById(R.id.after_sale_price_explorer);
-            tvBeforeSalePrice = itemView.findViewById(R.id.before_sale_price_explorer);
-            tvRate = itemView.findViewById(R.id.rate_explorer);
-            tvCourseImage = itemView.findViewById(R.id.course_image_explorer);
-            btnAdd = itemView.findViewById(R.id.button_add_explorer);
 
             btnAdd.setText(resources.getString(R.string.add));
             tvBeforeSalePrice.setPaintFlags(tvBeforeSalePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -119,7 +110,7 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
                     clickedListener.onViewClicked(course);
                 }
             });
-            setAnimation(itemView, position);
+            Log.d("Course Explorer", "New");
         }
     }
 }

@@ -21,22 +21,24 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.authentication.Activity.AbstractActivity;
 import com.example.authentication.Language.LocaleHelper;
 import com.example.authentication.R;
 import com.example.authentication.Activity.Walkthrough.SlideActivity;
 
 import io.paperdb.Paper;
 
-public class NewAccount extends AppCompatActivity {
+public class NewAccount extends AbstractActivity {
 
     private Button signUpButton, backButton;
     private EditText emailText;
     private TextView newAccountTextView, enterEmailTextView, alreadyHaveAccountTextView, ifExistsTextView ;
     private RadioGroup switchLanguage;
     private RadioButton english, vietnamese;
-    private SharedPreferences sharedPreferences;
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+
+    @Override
+    public void UpdateLanguage(String language) {
+
     }
 
     private boolean valid;
@@ -46,9 +48,6 @@ public class NewAccount extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
         getSupportActionBar().hide(); // hide the title bar
         setContentView(R.layout.new_account);
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Paper.init(this);
         String language = Paper.book().read("language");
@@ -78,7 +77,7 @@ public class NewAccount extends AppCompatActivity {
                     Paper.book().write("language", "vi");
                     vietnamese.setChecked(true);
                 }
-                editor.putString("language", Paper.book().read("language"));
+                putStringPref("language", Paper.book().read("language"));
                 updateView((String)Paper.book().read("language"));
                 Log.d("Language", Paper.book().read("language") + " ---- " + language);
             }
@@ -94,7 +93,7 @@ public class NewAccount extends AppCompatActivity {
             vietnamese.setChecked(true);
         }
 
-        editor.putString("language", Paper.book().read("language"));
+        putStringPref("language", Paper.book().read("language"));
         updateView((String)Paper.book().read("language"));
 
         signUpButton.setOnClickListener(view -> signup());

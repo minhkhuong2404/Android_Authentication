@@ -22,7 +22,6 @@ import java.util.List;
 public class NotificationRecyclerViewAdapter extends AbstractRecyclerViewAdapter<NotificationItem, NotificationRecyclerViewAdapter.NotificationViewHolder> {
     private List<NotificationItem> mNotifications;
     private Context mContext;
-    private int lastPosition = -1;
 
     public NotificationRecyclerViewAdapter(Context context, List<NotificationItem> data) {
         mContext = context;
@@ -37,19 +36,6 @@ public class NotificationRecyclerViewAdapter extends AbstractRecyclerViewAdapter
     @Override
     public NotificationViewHolder initViewHolder(View view, @NonNull ViewGroup parent, int viewType) {
         return new NotificationViewHolder(view);
-    }
-
-    /**
-     * Here is the key method to apply the animation
-     */
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            viewToAnimate.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.zoom_in));
-            lastPosition = position;
-        }
     }
 
     class NotificationViewHolder extends AbstractViewHolder<NotificationItem> {
@@ -75,9 +61,6 @@ public class NotificationRecyclerViewAdapter extends AbstractRecyclerViewAdapter
             tvNotificationInfo.setOnClickListener(v -> {
                 Toast.makeText(mContext, mNotifications.get(getAdapterPosition()).getNotificationInformation(), Toast.LENGTH_SHORT).show();
             });
-
-            setAnimation(itemView, position);
-
         }
     }
 }

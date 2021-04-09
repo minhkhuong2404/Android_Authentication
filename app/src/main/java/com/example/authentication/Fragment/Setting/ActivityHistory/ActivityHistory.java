@@ -6,8 +6,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,17 +15,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.authentication.Adapter.RecyclerView.MyCollectionRecyclerViewAdapter;
-import com.example.authentication.Object.Course.CourseView;
-import com.example.authentication.Fragment.AbstractFragment;
-import com.example.authentication.Object.CollectionItem.CollectionItem;
-import com.example.authentication.Object.Course.Course;
 import com.example.authentication.Adapter.RecyclerView.CourseExplorerRecyclerViewAdapter;
-import com.example.authentication.Model.Handler.CourseHandler;
+import com.example.authentication.Adapter.RecyclerView.MyCollectionRecyclerViewAdapter;
+import com.example.authentication.Fragment.AbstractFragment;
 import com.example.authentication.Language.LocaleHelper;
+import com.example.authentication.Model.Handler.CourseHandler;
+import com.example.authentication.Object.CollectionItem.CollectionItem;
+import com.example.authentication.Object.CollectionItem.OnCollectionClickedListener;
+import com.example.authentication.Object.Course.Course;
+import com.example.authentication.Object.Course.CourseView;
 import com.example.authentication.Object.Course.OnItemClickedListener;
 import com.example.authentication.R;
-import com.example.authentication.Object.CollectionItem.OnCollectionClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,7 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
      * @return A new instance of fragment Search.
      */
     // TODO: Rename and change types and number of parameters
-    public static ActivityHistory newInstance(String param1, String param2) {
+    public ActivityHistory newInstance(String param1, String param2) {
         ActivityHistory fragment = new ActivityHistory();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -95,12 +93,11 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rvCourses = view.findViewById(R.id.rv_my_courses);
-        rvCollection  = view.findViewById(R.id.rv_collection);
-        myCourse = view.findViewById(R.id.my_courses);
+        rvCourses = findViewById(R.id.rv_my_courses);
+        rvCollection  = findViewById(R.id.rv_collection);
+        myCourse = findViewById(R.id.my_courses);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String language = sharedPreferences.getString("Locale.Helper.Selected.Language", "en");
+        String language = getStringPref("Locale.Helper.Selected.Language", "en");
         Context context = LocaleHelper.setLocale(getContext(), language);
         Resources resources = context.getResources();
 
@@ -116,8 +113,8 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
 
         setUpRvCourses(mParam1);
 
-        TextView searchButton = view.findViewById(R.id.back_btn_my_courses);
-        searchButton.setOnClickListener(v -> backToSettings());
+        TextView searchButton = findViewById(R.id.back_btn_my_courses);
+        searchButton.setOnClickListener(v -> goBack());
 
     }
 
@@ -132,10 +129,6 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
         rvCourses.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
     }
 
-    private void backToSettings() {
-        requireActivity().getSupportFragmentManager().popBackStack();
-    }
-
     @Override
     public void getSelected(CollectionItem collectionItem, int position) {
         mCourses = new ArrayList<>();
@@ -146,18 +139,10 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
         }
     }
 
-    @Override
-    public void onAddClicked(TextView textView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        textView.clearAnimation();
-        textView.startAnimation(a);
-    }
-
     private void switchToCourseView(Course course) {
         FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.zoom_in, R.anim.zoom_in, R.anim.zoom_out, R.anim.zoom_out);
-        fragmentTransaction.add(R.id.myContainer, CourseView.newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
+        fragmentTransaction.add(R.id.myContainer, new CourseView().newInstance(course.getCourseImage(), course.getCategory(), course.getBeforeSalePrice(), course.getAfterSalePrice(), course.getCourseName(), course.getRate()), "view");
         fragmentTransaction.addToBackStack("view").commit();
     }
 
@@ -167,10 +152,12 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
     }
 
     @Override
+    public void onAddClicked(TextView textView) {
+        startAnimation(textView);
+    }
+
+    @Override
     public void onCourseClicked(ImageView imageView) {
-        Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in);
-        a.reset();
-        imageView.clearAnimation();
-        imageView.startAnimation(a);
+        startAnimation(imageView);
     }
 }

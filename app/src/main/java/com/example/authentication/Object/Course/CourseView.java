@@ -45,6 +45,11 @@ public class CourseView extends AbstractFragment {
         // Required empty public constructor
     }
 
+    @Override
+    protected CourseView newInstance(String mParam1, String mParam2) {
+        return null;
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -52,7 +57,7 @@ public class CourseView extends AbstractFragment {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static CourseView newInstance(String courseImage, String courseCategory, String courseBeforeSale, String courseAfterSale, String courseName, String courseRate) {
+    public CourseView newInstance(String courseImage, String courseCategory, String courseBeforeSale, String courseAfterSale, String courseName, String courseRate) {
         CourseView fragment = new CourseView();
         Bundle args = new Bundle();
         args.putString(COURSE_IMAGE, courseImage);
@@ -93,20 +98,20 @@ public class CourseView extends AbstractFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        Button backToCourse = view.findViewById(R.id.back_btn_course_view);
-        ImageView courseImage = view.findViewById(R.id.course_view_image);
-        courseCategory = view.findViewById(R.id.course_view_category);
-        courseBeforeSalePrice = view.findViewById(R.id.course_view_before_sale_price);
-        courseAfterSalePrice = view.findViewById(R.id.course_view_after_sale_price);
-        courseName = view.findViewById(R.id.course_view_name);
-        courseRate = view.findViewById(R.id.course_view_rate);
+        Button backToCourse = findViewById(R.id.back_btn_course_view);
+        ImageView courseImage = findViewById(R.id.course_view_image);
+        courseCategory = findViewById(R.id.course_view_category);
+        courseBeforeSalePrice = findViewById(R.id.course_view_before_sale_price);
+        courseAfterSalePrice = findViewById(R.id.course_view_after_sale_price);
+        courseName = findViewById(R.id.course_view_name);
+        courseRate = findViewById(R.id.course_view_rate);
 
-        courseCategoryText = view.findViewById(R.id.course_category);
-        courseBeforeSalePriceText = view.findViewById(R.id.course_before_sale_price);
-        courseAfterSalePriceText = view.findViewById(R.id.course_after_sale_price);
-        courseRateText = view.findViewById(R.id.course_rate);
+        courseCategoryText = findViewById(R.id.course_category);
+        courseBeforeSalePriceText = findViewById(R.id.course_before_sale_price);
+        courseAfterSalePriceText = findViewById(R.id.course_after_sale_price);
+        courseRateText = findViewById(R.id.course_rate);
 
-        backToCourse.setOnClickListener(v -> backToCourse());
+        backToCourse.setOnClickListener(v -> goBack());
 
         Glide.with(getContext()).load(getCourseImage).into(courseImage);
         courseCategory.setText(getCourseCategory);
@@ -118,9 +123,4 @@ public class CourseView extends AbstractFragment {
         courseBeforeSalePrice.setPaintFlags(courseBeforeSalePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         courseBeforeSalePrice.getPaint().setStrikeThruText(true);
     }
-
-    private void backToCourse() {
-        requireActivity().getSupportFragmentManager().popBackStack();
-    }
-
 }

@@ -48,23 +48,21 @@ public class SlideActivity extends AbstractActivity {
         }
         else
         {
-            getSharedPreferences("slide",MODE_PRIVATE).edit().putBoolean("slide",false).apply(); // change to true to make walkthrough appear once only
+            putBooleanPref("slide", false); // change to true to make walkthrough appear once only
         }
         next = findViewById(R.id.next);
         back = findViewById(R.id.back);
 
         btnGetStarted = findViewById(R.id.btnGetStarted);
         btnGetStarted.setOnClickListener(v -> {
-
             Intent intent=new Intent(getApplicationContext(), NewAccount.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK); //Intent.FLAG_ACTIVITY_CLEAR_TASK  vs Intent.FLAG_ACTIVITY_TASK_ON_HOME
-            getApplicationContext().startActivity(intent);
+            startActivity(intent);
         });
 
         next.setOnClickListener(v -> viewPager.postDelayed(() -> {
             viewPager.setCurrentItem(position++);
             // when go to the last page, next button will be disabled
-
             if (position == 3) { // 3 because position++
                 next.setVisibility(View.GONE);
             } else {
@@ -76,6 +74,6 @@ public class SlideActivity extends AbstractActivity {
     }
 
     private boolean isOpenAlready() {
-        return getSharedPreferences("slide",MODE_PRIVATE).getBoolean("slide",false);
+        return getBooleanPref("slide",false);
     }
 }

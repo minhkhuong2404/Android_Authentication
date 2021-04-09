@@ -35,7 +35,7 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Splash extends AppCompatActivity {
+public class Splash extends AbstractActivity {
 
     private String path = "https://6062ebee0133350017fd227f.mockapi.io/Courses";
     private URL url;
@@ -45,7 +45,6 @@ public class Splash extends AppCompatActivity {
 
     private String category1, category2, study, collection;
     private AsyncTaskSplash asyncTask;
-    private SharedPreferences sharedPreferences;
 
     ImageView icon, iconBackground;
     TextView appName;
@@ -80,6 +79,11 @@ public class Splash extends AppCompatActivity {
         lottieAnimationView.animate().translationY(1400).setDuration(1000).setStartDelay(4200);
 
         new Handler().postDelayed(this::switchToHome,5000);
+
+    }
+
+    @Override
+    public void UpdateLanguage(String language) {
 
     }
 
@@ -126,8 +130,7 @@ public class Splash extends AppCompatActivity {
         }
         responseText = response.toString();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.edit().putString("JSON", responseText).apply();
+        putStringPref("JSON", responseText);
 
         //Call ServerData() method to call webservice and store result in response
         //  response = service.ServerData(path, postDataParams);
@@ -146,7 +149,6 @@ public class Splash extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void switchToHome() {

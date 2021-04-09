@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.authentication.Adapter.SlidePager.Abstract.AbstractSlidePagerAdapter;
 import com.example.authentication.Language.LocaleHelper;
@@ -20,8 +21,8 @@ public class ExplorerImageSlideAdapter extends AbstractSlidePagerAdapter<Integer
     private String[] category;
     private Context context;
 
-    public ExplorerImageSlideAdapter(Context context, Integer[] background) {
-        super(background);
+    public ExplorerImageSlideAdapter(int currentPage, Context context, Integer[] background, ViewPager viewPager) {
+        super(currentPage, background, viewPager);
         this.background = background;
         this.context = context;
     }
