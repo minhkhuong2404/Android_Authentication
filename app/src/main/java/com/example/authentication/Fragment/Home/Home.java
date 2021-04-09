@@ -148,15 +148,15 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
         } else if (18 < hour) {
             time_of_day = resources.getString(R.string.good_evening);
         }
-        tvUsername.setText(String.format("%s, %s%s", time_of_day, removeEmailDomain.substring(0, 1).toUpperCase(), removeEmailDomain.substring(1)));
-        topCourse1.setText(String.format("%s %s", resources.getString(R.string.top_courses_in), mParam3));
-        topCourse2.setText(String.format("%s %s", resources.getString(R.string.top_courses_in), mParam4));
-        seeAllCourse1.setText(resources.getString(R.string.see_all));
-        seeAllCourse2.setText(resources.getString(R.string.see_all));
-        designIcon.setText(resources.getString(R.string.design_icon));
-        codeIcon.setText(resources.getString(R.string.code_icon));
-        businessIcon.setText(resources.getString(R.string.business_icon));
-        photographIcon.setText(resources.getString(R.string.photograph_icon));
+        ((TextView)findViewById(R.id.username)).setText(String.format("%s, %s%s", time_of_day, removeEmailDomain.substring(0, 1).toUpperCase(), removeEmailDomain.substring(1)));
+        ((TextView)findViewById(R.id.top_course_1)).setText(String.format("%s %s", resources.getString(R.string.top_courses_in), mParam3));
+        ((TextView)findViewById(R.id.top_course_2)).setText(String.format("%s %s", resources.getString(R.string.top_courses_in), mParam4));
+        ((TextView)findViewById(R.id.see_all_design_courses)).setText(resources.getString(R.string.see_all));
+        ((TextView)findViewById(R.id.see_all_business_courses)).setText(resources.getString(R.string.see_all));
+        ((TextView)findViewById(R.id.design_icon)).setText(resources.getString(R.string.design_icon));
+        ((TextView)findViewById(R.id.code_icon)).setText(resources.getString(R.string.code_icon));
+        ((TextView)findViewById(R.id.business_icon)).setText(resources.getString(R.string.business_icon));
+        ((TextView)findViewById(R.id.photograph_icon)).setText(resources.getString(R.string.photograph_icon));
 
     }
 
@@ -174,12 +174,6 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
 
         rvCourses = findViewById(R.id.rv_course_design);
         rvCoursesBusiness = findViewById(R.id.rv_course_business);
-        seeAllCourse1 = findViewById(R.id.see_all_design_courses);
-        seeAllCourse2 = findViewById(R.id.see_all_business_courses);
-        designIcon = findViewById(R.id.design_icon);
-        codeIcon = findViewById(R.id.code_icon);
-        businessIcon = findViewById(R.id.business_icon);
-        photographIcon = findViewById(R.id.photograph_icon);
 
         // get the username from the email
         if (!mParam1.split("@")[0].equals("")) {
@@ -187,14 +181,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
             putStringPref("username", removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
         }
 
-        tvUsername = findViewById(R.id.username);
-
-        topCourse1 = findViewById(R.id.top_course_1);
-
         setRvCourses(rvCourses, topCourseString1);
-
-        topCourse2 = findViewById(R.id.top_course_2);
-
         setRvCourses(rvCoursesBusiness, topCourseString2);
 
         // load avatar images

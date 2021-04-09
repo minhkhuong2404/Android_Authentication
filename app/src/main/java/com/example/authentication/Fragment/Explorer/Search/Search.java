@@ -91,13 +91,10 @@ public class Search extends AbstractFragment implements OnItemClickedListener {
         rvCourses.setAdapter(mSearchAdapter);
         rvCourses.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        Button backToExplorer = findViewById(R.id.back_btn_search);
-        TextView clearButton = findViewById(R.id.search_clear_btn);
         EditText searchButton = findViewById(R.id.search_btn);
 
-        backToExplorer.setOnClickListener(v -> goBack());
-
-        clearButton.setOnClickListener(v -> searchButton.getText().clear());
+        findViewById(R.id.back_btn_search).setOnClickListener(v -> goBack());
+        findViewById(R.id.search_clear_btn).setOnClickListener(v -> searchButton.getText().clear());
     }
 
     @Override

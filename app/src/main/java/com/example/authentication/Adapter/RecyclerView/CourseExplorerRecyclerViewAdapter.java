@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.authentication.Adapter.RecyclerView.Abstract.AbstractRecyclerViewAdapter;
@@ -31,6 +33,7 @@ public class CourseExplorerRecyclerViewAdapter extends AbstractRecyclerViewAdapt
     private List<Course> mCourses;
     private Context mContext;
     private OnItemClickedListener clickedListener;
+    private CourseExplorerRecyclerViewAdapter myCourseCollectionAdapter;
 
     public CourseExplorerRecyclerViewAdapter(Context context, List<Course> data) {
         mContext = context;

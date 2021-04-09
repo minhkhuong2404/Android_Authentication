@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.authentication.Adapter.RecyclerView.Abstract.AbstractRecyclerViewAdapter;
 import com.example.authentication.Adapter.RecyclerView.Abstract.AbstractViewHolder;
@@ -23,6 +25,7 @@ public class MyCollectionRecyclerViewAdapter extends AbstractRecyclerViewAdapter
     private Context mContext;
     public int positionItem = 0;
     private OnCollectionClickedListener onCollectionClickedListener;
+    private MyCollectionRecyclerViewAdapter myCourseCollectionAdapter;
 
     public MyCollectionRecyclerViewAdapter(Context context, List<CollectionItem> data) {
         mContext = context;

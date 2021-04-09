@@ -88,14 +88,13 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
         Context context = LocaleHelper.setLocale(getContext(), language);
         Resources resources = context.getResources();
 
-        myCourse.setText(resources.getString(R.string.my_courses));
+        ((TextView)findViewById(R.id.my_courses)).setText(resources.getString(R.string.my_courses));
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         rvCourses = findViewById(R.id.rv_my_courses);
         rvCollection  = findViewById(R.id.rv_collection);
-        myCourse = findViewById(R.id.my_courses);
 
         String language = getStringPref("Locale.Helper.Selected.Language", "en");
         Context context = LocaleHelper.setLocale(getContext(), language);
@@ -113,8 +112,7 @@ public class ActivityHistory extends AbstractFragment implements OnCollectionCli
 
         setUpRvCourses(mParam1);
 
-        TextView searchButton = findViewById(R.id.back_btn_my_courses);
-        searchButton.setOnClickListener(v -> goBack());
+        findViewById(R.id.back_btn_my_courses).setOnClickListener(v -> goBack());
 
     }
 

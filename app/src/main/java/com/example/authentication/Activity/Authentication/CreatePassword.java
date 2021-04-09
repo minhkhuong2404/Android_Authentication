@@ -63,7 +63,7 @@ public class CreatePassword extends AbstractActivity {
            finish();
         });
 
-        signUpButton.setOnClickListener(view -> signup());
+        signUpButton.setOnClickListener(v -> signup());
 
         passwordText.setOnEditorActionListener((v, actionId, event) -> {
             if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
@@ -125,19 +125,14 @@ public class CreatePassword extends AbstractActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Account", "createUserWithEmail:success");
-                        Toast.makeText(CreatePassword.this, "New account created", Toast.LENGTH_SHORT).show();
+                        Log.d("Account", "New account created");
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("Account", "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(CreatePassword.this, "No Account Created. Please login",
-                                Toast.LENGTH_SHORT).show();
+                        Log.w("Account", "No Account Created. Please login", task.getException());
                         switchToLogIn();
                     }
                 });
-
         setResult(RESULT_OK, null);
-
     }
 
     public void onSignUpFailed() {
@@ -157,10 +152,5 @@ public class CreatePassword extends AbstractActivity {
         }
 
         return valid;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

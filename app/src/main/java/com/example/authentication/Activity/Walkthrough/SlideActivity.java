@@ -42,9 +42,7 @@ public class SlideActivity extends AbstractActivity {
 
         if (isOpenAlready())
         {
-            Intent intent=new Intent(SlideActivity.this, NewAccount.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK); // Intent.FLAG_ACTIVITY_CLEAR_TASK vs Intent.FLAG_ACTIVITY_TASK_ON_HOME
-            startActivity(intent);
+            startFlagsActivity(getApplicationContext(), NewAccount.class);
         }
         else
         {
@@ -55,9 +53,7 @@ public class SlideActivity extends AbstractActivity {
 
         btnGetStarted = findViewById(R.id.btnGetStarted);
         btnGetStarted.setOnClickListener(v -> {
-            Intent intent=new Intent(getApplicationContext(), NewAccount.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK); //Intent.FLAG_ACTIVITY_CLEAR_TASK  vs Intent.FLAG_ACTIVITY_TASK_ON_HOME
-            startActivity(intent);
+            startFlagsActivity(getApplicationContext(), NewAccount.class);
         });
 
         next.setOnClickListener(v -> viewPager.postDelayed(() -> {

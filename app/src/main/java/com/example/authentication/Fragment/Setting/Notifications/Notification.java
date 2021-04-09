@@ -87,14 +87,13 @@ public class Notification extends AbstractFragment {
         Context context = LocaleHelper.setLocale(getContext(), language);
         Resources resources = context.getResources();
 
-        notificationTextView.setText(resources.getString(R.string.notifications));
+        ((TextView)findViewById(R.id.notification_setting)).setText(resources.getString(R.string.notifications));
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvNotification = findViewById(R.id.rv_notification_setting);
-        notificationTextView = findViewById(R.id.notification_setting);
 
         try {
             mNotifications = new NotificationHandler(getContext(), null, null, 1).loadNotificationHandler();

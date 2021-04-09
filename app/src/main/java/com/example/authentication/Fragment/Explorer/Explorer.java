@@ -90,9 +90,9 @@ public class Explorer extends AbstractFragment implements OnItemClickedListener 
         Context context = LocaleHelper.setLocale(getContext(), language);
         Resources resources = context.getResources();
 
-        explore.setText(resources.getString(R.string.explorer));
-        editorChoice.setText(resources.getString(R.string.editor_choice));
-        seeAll.setText(resources.getString(R.string.see_all));
+        ((TextView)findViewById(R.id.explorer)).setText(resources.getString(R.string.explorer));
+        ((TextView)findViewById(R.id.editor_choice)).setText(resources.getString(R.string.editor_choice));
+        ((TextView)findViewById(R.id.see_all_explorer)).setText(resources.getString(R.string.see_all));
     }
 
     @Override
@@ -100,10 +100,6 @@ public class Explorer extends AbstractFragment implements OnItemClickedListener 
 
         RecyclerView rvCourses = findViewById(R.id.rv_course_explorer);
         firstLogIn = mParam2;
-
-        explore = findViewById(R.id.explorer);
-        editorChoice = findViewById(R.id.editor_choice);
-        seeAll = findViewById(R.id.see_all_explorer);
 
         List<Course> mCourses = new CourseHandler(getContext(), null, null,1).loadCourseHandler("All");
 

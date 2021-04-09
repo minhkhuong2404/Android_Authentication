@@ -60,14 +60,9 @@ public class PhoneNumber extends AbstractActivity {
 
         addPhoneNumber.setOnClickListener(view -> {
             if (TextUtils.isEmpty(phoneNumber.getText().toString()) && phoneNumber.getText().toString().length() != 12) {
-                // when mobile number text field is empty
-                // displaying a toast message.
                 Toast.makeText(PhoneNumber.this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
             } else {
-                // if the text field is not empty we are calling our
-                // send OTP method for getting OTP from Firebase.
                 phone = "+1" + phoneNumber.getText().toString().replace("-","");
-
             }
             signup();
         });
@@ -79,18 +74,18 @@ public class PhoneNumber extends AbstractActivity {
             return false;
 
         });
-        int digits = phoneNumber.getText().toString().length();
 
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = phoneNumber.getText().toString().length();
                 if (digits > 1)
                     lastChar = phoneNumber.getText().toString().substring(digits-1);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Log.d("LENGTH",""+digits);
+                int digits = phoneNumber.getText().toString().length();
                 if (!lastChar.equals("-")) {
                     if (digits == 3 || digits == 7) {
                         phoneNumber.append("-");
@@ -181,9 +176,5 @@ public class PhoneNumber extends AbstractActivity {
         } catch(NumberFormatException e){
             return false;
         }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

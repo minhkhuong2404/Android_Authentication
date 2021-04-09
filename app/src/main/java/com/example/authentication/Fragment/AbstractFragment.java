@@ -3,8 +3,6 @@ package com.example.authentication.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +12,6 @@ import android.view.animation.AnimationUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.authentication.Adapter.RecyclerView.Abstract.AbstractRecyclerViewAdapter;
-import com.example.authentication.Adapter.RecyclerView.Abstract.AbstractViewHolder;
-import com.example.authentication.Adapter.RecyclerView.NotificationRecyclerViewAdapter;
-import com.example.authentication.Fragment.Setting.MyAccount.MyAccount;
-import com.example.authentication.Object.NotificationItem;
 import com.example.authentication.R;
 
 abstract public class AbstractFragment extends Fragment {

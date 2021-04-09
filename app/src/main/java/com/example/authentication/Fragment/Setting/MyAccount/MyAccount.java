@@ -118,8 +118,7 @@ public class MyAccount extends AbstractFragment implements OnCollectionClickedLi
         rvBadges = findViewById(R.id.rv_my_badges_settings);
         rvCollection  = findViewById(R.id.rv_collection_settings);
 
-        tvUsername = findViewById(R.id.username_settings);
-        tvUsername.setText(removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
+        ((TextView)findViewById(R.id.username_settings)).setText(removeEmailDomain.substring(0,1).toUpperCase() + removeEmailDomain.substring(1));
 
         imageview = requireView().findViewById(R.id.avatar_settings);
         if (checkPermissionWRITE_EXTERNAL_STORAGE(getContext())) {

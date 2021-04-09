@@ -186,9 +186,4 @@ public class LogIn extends AbstractActivity {
         }
         return true;
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
