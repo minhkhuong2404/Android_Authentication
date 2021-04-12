@@ -35,6 +35,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.example.authentication.Activity.CoursePresenter;
+import com.example.authentication.Activity.CoursePresenterImpl;
 import com.example.authentication.Adapter.RecyclerView.CourseRecyclerViewAdapter;
 import com.example.authentication.Adapter.SlidePager.ImageSliderAdapter;
 import com.example.authentication.Fragment.AbstractFragment;
@@ -49,6 +51,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
@@ -58,7 +61,7 @@ import static android.view.View.GONE;
  * Use the {@link Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends AbstractFragment implements OnItemClickedListener {
+public class Home extends AbstractFragment implements OnItemClickedListener, com.example.authentication.Activity.CourseView {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,7 +74,6 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     private String mParam1, mParam2, mParam3, mParam4;
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-    private TextView tvUsername, topCourse1, topCourse2, seeAllCourse1, seeAllCourse2, designIcon, codeIcon, businessIcon, photographIcon;
     private RecyclerView rvCourses, rvCoursesBusiness;
     private CourseRecyclerViewAdapter mCourseAdapter;
     private ImageView imageview;
@@ -85,6 +87,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
     private ViewPager imageSlider;
     private int currentPage = 0;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private CoursePresenter coursePresenter;
 
     public Home() {
         // Required empty public constructor
@@ -184,6 +187,8 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
         setRvCourses(rvCourses, topCourseString1);
         setRvCourses(rvCoursesBusiness, topCourseString2);
 
+        coursePresenter = new CoursePresenterImpl(this, getContext());
+
         // load avatar images
         imageview = findViewById(R.id.avatar);
         imageview.setOnClickListener(v -> onLaunchPhoto());
@@ -259,6 +264,10 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
         });
     }
 
+    @Override
+    public void updateCourseData(List<Course> courseList) {
+
+    }
     public void loading() {
         try {
             if (lottieAnimationView.getVisibility() == View.VISIBLE) {
@@ -279,7 +288,7 @@ public class Home extends AbstractFragment implements OnItemClickedListener {
 
     public void setRvCourses(RecyclerView recyclerView, String whereToLoad) {
         mCourseAdapter = new CourseRecyclerViewAdapter(getContext());
-        mCourseAdapter.setData(new CourseHandler(getContext(), null, null, 1).loadCourseHandler(whereToLoad));
+        mCourseAdapter.setData(coursePresenter.updateCourse(whereToLoad));
         mCourseAdapter.setClickedListener(this);
 
         recyclerView.setAdapter(mCourseAdapter);
